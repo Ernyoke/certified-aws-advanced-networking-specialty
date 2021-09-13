@@ -35,3 +35,21 @@
     - They generate and send/receive light to/from fibre
     - They are either single or multimode, they are optimized for a single type of cable
     - Specifications: **1000BASE-LX**, **10GBASE-LR**, **100GBASE-LR4**
+
+## Layer 2 - Data Link Layer
+
+- Higher layers build on lower layers, a layer 2 network requires a working layer 1 network to operate on
+- Frames: format of sending information in a layer 2 network
+- Devices at layer 2 have an uniq address (MAC). MAC addresses are 48 bit addresses, in hex
+- A MAC address is not software assigned, it is uniquely assigned by the manufacturer
+- A MAC address has 2 parts: the OUI (Organizationally Unique Identifier) and the network interface controller specific part
+- Layer 2 frame components:
+    - Preamble: indicates the start of the frame
+    - Destination/source MAC addresses
+        - If the destination address is ALL F's, the frame will be broadcasted to all devices on the network
+    - Ether type: which layer 3 protocol puts its data to the frame
+    - Payload (46 - 1500 bytes)
+    - Frame check sequence: allows the check if the frame was corrupted
+
+![Layer 2 frame](images/Layer2DataLink.png)
+
