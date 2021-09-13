@@ -1,0 +1,10 @@
+theme: jekyll-theme-leap-day
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - README.md
+title: AWS Certified Advanced Networking – Specialty (ANS-C00) Exam Guide
+description: AWS Certified Advanced Networking – Specialty
