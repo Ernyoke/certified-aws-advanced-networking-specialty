@@ -3,7 +3,7 @@
 ## Table of Contents
 
 1. Networking and Technical Fundamentals
-    - [Networking Starter Pack](01-fundamentals/starter-pack.md)
+    - [OSI 7-Layer Model](01-fundamentals/osi.md)
 
 ## Exam Description
 

@@ -1,6 +1,4 @@
-# Networking Started Pack
-
-## OSI 7-Layer Model
+# OSI 7-Layer Model
 
 ![OSI 7-Layer Model](images/OSI7LayerModel.png)
 
@@ -65,4 +63,58 @@
         - If it knows where to transmit, the data will be sent to the only node
     - Switches do not forward collisions
 
+## Layer 3 - Network
 
+- Each device on local layer 2 network can communicate with each other but not outside of the local layer 2 network
+- Ethernet is a L2 protocol used generally for local networks. Long distance point to point links will use other more suitable protocols such as PPP, MPLS or ATM
+- This protocols do not use frames of the same format
+- To move data between local networks, we need Layer 3
+- Layer 3 adds a few capabilities over L2 networks which are:
+    - Internet Protocol (IP): L3 protocol which adds cross-network IP addressing and routing to move data between Local Area Networks without direct P2P links
+    - IP packets: are moved from source to destination via intermediate networks
+    - **Routers**: devices which moves packets of data between different networks
+- Packets: data unit used in the IP protocol, they are similar to frames. The destination and source packets are not local
+- There are 2 versions if IP protocol in use:
+    - v4: used for decades
+    - v6
+- IPv4 packets contains a few different fields, more important ones:
+    - Source IP
+    - Destination IP
+    - Protocol: contains data provided by L4, specified which L4 protocol is used (TCP, UDP, ICMP)
+    - Data
+    - TTL: how many hops through can a packet moved
+- IPv6 packet structure:
+    - Source/Destination IP: bigger than IPv4
+    - Data
+    - Hop Limit: similar to TTL
+- IP Addressing (v4):
+    - Dotted decimal notation: 133.33.3.7
+    - All IP addresses are format of 2 different parts:
+        - Network part: states which IP network this IP address belongs to
+        - Host part: host on that network
+    - If the network part matches for 2 different devices, there are on the same IP network
+    - IP addresses are statically assigned or by DHCP software
+    - IP addresses must be unique
+- Subnet Mask:
+    - Configured on L3 interfaces
+    - Default Gateway: IP address on local network which packets are forwarded to if the destination is not a local IP address
+    - Subnet Mask allow to determine if a destination IP is on the same network or not
+    - Subnet Mask examples:
+        - 255.255.0.0
+        - /16 (CIDR notation)
+        - Binary format: anything with `1` represents the network component, anything with `0` represents the host component
+- Route Tables and Routes:
+    - Every router has at least one route table
+    - A route table is a collection of routes
+    - A route is a destination IP field and next hop/target IP field
+    - Routes are selected based on how specific they are: /32 is the most specific while /0 is the least specific route
+    - The packet is forwarded to the next hop address
+    - Route tables can be statically populated or there are dynamic protocols such as BGP which lets routers exchange network information
+- Address Resolution Protocol (ARP):
+    - Used when a L3 packet is encapsulated in a frame and sent ot a MAC address
+    - We don't initially know the MAC address and need a protocol to find the MAC address for an IP address
+    - ARP gives the MAC address for specific IP address
+    - ARP broadcasts on L2, it sends a packet for all devices on the network asking who has a specific IP address
+- IP Routing
+
+    ![Layer 3 IP Routing](images/Layer3Network4.png)
