@@ -20,3 +20,25 @@
 - For incoming traffic the destination IP address is updated with the corresponding private IP address a forwarded to the device on the network
 
 ![Static NAT](images/NAT1.png)
+
+## Dynamic NAT
+
+- Devices are not allocated a permanent public IP, they are allocated one available from a pool for a temporary usage
+- Multiple private devices can share a single private IP as long as there is no overlap
+- It is possible to run out of IP addresses to allocate
+- This type of NAT process is used when there are fewer public IP addresses than devices and all of the devices need public access which is bidirectional
+
+![Dynamic NAT](images/NAT2.png)
+
+## Port Address Translation
+
+- Allows a large amount of devices share a public IP address
+- This is how the AWS NAT Gateway works
+- They way of how PAT works is to use both IP addresses and ports in order to allow sharing the same public IP
+- Every TCP connection besides the source and destination IP addresses, has a source and destination port
+- The destination port for the outgoing connection is important, the source port is randomly assigned by the client
+- As long as the source port is unique, many clients can use the private IP address
+- The NAT device creates a NAT table and stores both the destination/source addresses and destination/source ports
+- With PAT we can not initiate traffic from the outside to the devices inside the network. Without a NAT entry in the NAT table, the NAT device wont know where to forward the traffic from the outside
+
+![PAT](images/NAT3.png)
