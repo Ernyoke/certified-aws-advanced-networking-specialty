@@ -118,3 +118,50 @@
 - IP Routing
 
     ![Layer 3 IP Routing](images/Layer3Network4.png)
+
+## Layer 4/5 - Transport and Session
+
+- Each L3 packet is a separated and isolated thing and it is routed independently over the internet
+- The arrival condition of packets may be different compared to the condition when there were generated and sent:
+    - Out of order arrival: packets arrive in different order compared to how they were sent
+    - Packets can go missing
+    - Delay in delivery: some packets may be delayed if the network conditions are wrong
+- L3 packets have a source and destination fields, they don't have anything beyond that to distinguish channels of communications => there is no method to distinguish if the different applications are sending/receiving packets
+- IP has no flow control: source device can saturate the destination device
+- Layer 4 builds on the of L3 and adds 2 new protocols:
+    - **TCP (Transmission Control Protocol)**: provides reliability, error corrections and ordering of data. Used of most of the application layer protocols (HTTP, HTTPS, SSH, etc.)
+    - **UDP (User Datagram Protocol)**: faster than TCP, does not have the TCP overhead
+- Both TCP and UDP run on top of IP, TCP offers reliability while UDP offers performance
+- **TCP Segments**:
+    - Another container for data, specific to TCP
+    - They are encapsulated in IP packets
+    - Segments do not have source/destination addresses, they use the IP addressing
+    - Important fields (TCP Header):
+        - Source/Destination ports: gives the combined TCP/IP protocols, offers the availability to have multiple different conversation between devices
+        - Sequence: number that is incremented with each segments. Used for error corrections and packet ordering
+        - Acknowledgement: the way to indicate that one side received the segments up to certain sequence number. Every segments needs to be acknowledged
+        - Flags 'n' Things: flags + number of extra fields
+        - Window: number bytes that we indicate that we are willing to receive between 2 acknowledgments. Used of flow control
+        - Checksum: used for error checking and retransmission
+        - Urgent pointer: settings this field means both sides have can have separate processing, the control traffic takes priority between other transmission
+- TCP is connection based. A connection is established between 2 devices using a random port on a client and know port on the server. Once established the connection is bi-directional
+- L4 takes data and chops data into segments, encapsulated into IP packets. TCP gives use the reliable ordered segment based connection
+- Well known port: port used for connecting to server application, example: 80, 443
+- Ephemeral port: "random" temporary port from a higher prot range created for the TCP channel in order fo the server to be able to respond and establish two-way connection
+- TCP Connection 3-way Handshake:
+    - Flag fields: can be set to alter the connection, example FIN can be used to close, ACK for acknowledgements, SYN for synchronize sequence number
+
+    ![TPC 3-way Handshake](images/Layer4Transport4.png)
+
+- Sessions and State:
+    - We would want to add security to the traffic, the problem is what rules we add, what types of traffic we can allow from where and to where?
+    - Stateless firewall:
+        - We need 2 rules: one for outbound connection and one for inbound connection (NACL in AWS)
+    - Stateful firewall:
+        - Understands the state of the TCP segment
+        - If we allow the initiating connection, we automatically allow the response (Security Group in AWS)
+    
+    ![Sessions and State](images/Layer5Session.png)
+
+
+
