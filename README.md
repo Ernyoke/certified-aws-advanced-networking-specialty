@@ -5,6 +5,7 @@
 1. Networking and Technical Fundamentals
     - [OSI 7-Layer Model](01-fundamentals/osi.md)
     - [NAT - Network Address Translation](01-fundamentals/nat.md)
+    - [# DDoS - Distributed Denial of Service Attacks](01-fundamentals/ddos.md)
 
 ## Exam Description
 
