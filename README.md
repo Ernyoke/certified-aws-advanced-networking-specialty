@@ -4,6 +4,7 @@
 
 1. Networking and Technical Fundamentals
     - [OSI 7-Layer Model](01-fundamentals/osi.md)
+    - [NAT - Network Address Translation](01-fundamentals/nat.md)
 
 ## Exam Description
 
