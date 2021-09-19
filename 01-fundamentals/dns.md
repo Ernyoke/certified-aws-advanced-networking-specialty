@@ -42,4 +42,16 @@
 - The root zone and thus the zone file is just a database for top level domains (example: .com, .org, .uk)
 - IANA don't run anything on the root zone besides the top level domains, they delegate management to other organizations named registries
 
-## DNS Resolution
+## DNS Record Types
+
+- Nameserver records (NS): allow delegation to occur in DNS, point at other authoritative servers
+- A and AAAA records: map host names to IP addresses. A records maps the DNS to an IPv4 address, AAAA maps it to a IPv6 addresses
+- CNAME (Canonical Name) records: lets us create host to host records. Used to reduce admin overhead. Example: CNAME ftp, mail and www can point to a single name
+- MX records: used for email server. 
+    - MX records have two parts, a priority and a value
+    - The value can be the host mail server It can can point to a server inside the zone or a host outside of the zone (by appending a dot in the end becoming a FQDN)
+    -  The priority records indicate which host should be prioritized and picket first
+- TXT records: allows to add arbitrary text to a domain
+    - Common usage: prove domain ownership by adding a specific text to the domain
+    - Other uses are spam fighting, etc.
+- TTL: a numeric value in seconds. We can indicate how long records can be cached for at the resolver server
