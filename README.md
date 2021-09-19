@@ -7,6 +7,7 @@
     - [NAT - Network Address Translation](01-fundamentals/nat.md)
     - [DDoS - Distributed Denial of Service Attacks](01-fundamentals/ddos.md)
     - [SSL - Secure Sockets Layer and TLS - Transport Layer Security](01-fundamentals/ssl.md)
+    - [DNS 101](01-fundamentals/dns.md)
 
 ## Exam Description
 
