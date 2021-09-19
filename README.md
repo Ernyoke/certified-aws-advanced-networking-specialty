@@ -10,6 +10,7 @@
     - [DNS 101](01-fundamentals/dns.md)
     - [Route 53 Fundamentals](01-fundamentals/route53.md)
     - [VLANs, Trunks and Q-in-Q](01-fundamentals/vlan.md)
+    - [Jumbo Frames and MTU](01-fundamentals/jumbo.md)
 
 ## Exam Description
 
