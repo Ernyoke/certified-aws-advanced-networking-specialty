@@ -8,10 +8,11 @@
     - [DDoS - Distributed Denial of Service Attacks](01-fundamentals/ddos.md)
     - [SSL - Secure Sockets Layer and TLS - Transport Layer Security](01-fundamentals/ssl.md)
     - [DNS 101](01-fundamentals/dns.md)
+    - [Route 53 Fundamentals](01-fundamentals/route53.md)
 
 ## Exam Description
 
-The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:
+The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:g
 - Design, develop, and deploy cloud-based solutions by using AWS
 - Implement core AWS services according to basic architectural best practices
 - Design and maintain network architecture for all AWS services
