@@ -10,12 +10,12 @@
 
 ## Application Layer Attacks
 
-![Application Layer Attacks](images/ddos2.png)
+![Application Layer Attacks](images/DDOS2.png)
 
 ## Protocol Based Attacks
 
-![Protocol Based Attacks](images/ddos3.png)
+![Protocol Based Attacks](images/DDOS3.png)
 
 ## Volumetric/Amplification Attacks
 
-![Volumetric Attacks](images/ddos3.png)
+![Volumetric Attacks](images/DDOS3.png)
