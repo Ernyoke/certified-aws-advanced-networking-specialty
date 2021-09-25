@@ -57,3 +57,45 @@
 - VPCs have a configuration object applied to them, called DHCP Option Set
 - Option sets can be configured manually on a VPC but they cannot be changed. Some option sets are:
     - Auto Assign IPv4, IPv6
+
+## DHCP in a VPC
+
+- DHCP - Dynamic Host Configuration Protocol: offers auto configuration for network resources
+- Every device has a hard-coded MAC address (Layer 2 address)
+- DHCP begins with a L2 broadcast to discover a DHCP server on the local network
+- Once discovered a DHCP server and a DHCP clients communicate, meaning that the client will get in the end an IP address, a Subnet Mask and Default Gateway address (L3 configuration)
+- DHCP also configures which DNS server should a resource use in a VPC
+- Also configures NTP servers, NetBios Name Servers and Node types
+- For DNS server we can explicitly provide values or we can use `AmazonProvidedDNS`
+- We also get allocated 1 or 2 DNS names for the services in the VPC. One can be public if the instance has a public IP address allocated
+- Custom DNS names: we can give custom DNS names to EC2 instances if we use our own custom DNS servers
+- DHCP options sets:
+    - Once created option sets can not be changed
+    - Can be associated with 0 or more VPCs
+    - Each VPC can have a max of 1 option set associated
+    - We we change a DHCP option set associated to the VPC, the change is immediate, but any new setting will only affect anything once a DHC renew occurs
+    - What we can configure in an option set:
+        - DNS server (Route 53 resolver) what we can use in the VPC
+        - NTP server
+
+## VPC Router Deep Dive
+
+- Is at the core of any network which involves AWS
+- Is a virtual router in a VPC
+- It is HA across al AZs in a region, no management overhead is required
+- It is scalable, no management overhead required
+- VPC routes routes traffic between subnets in a VPC
+- Routes traffic from external network into the and vice-versa
+- VPC router has an interface in every subnet in a VPC: `subnet+1` address (Default Gateway), the first IP address in each subnet after the network address itself
+- We control how the VPC routes traffic using Route Tables
+
+## VPC Route Tables
+
+- Every VPC is created with a main Route Table (RT), which is the default for every VPC
+- Custom route tables can be created for each subnet
+- Subnets can be associated with only one RT which can be the main one or custom
+- If we disassociate a custom RT form a subnet, the main RT will be attached to it
+- Main RT should not be changed, custom RT should be used for any routing changes
+- RT have routes, routes have an order, the most specific route wins
+- Edge Association: a RT tables is associated with network gateway
+- All RTs have at least one route: the local route which matches the VPC cidr range. These routes are un-editable
