@@ -125,3 +125,39 @@
 - SGs support IP/CIDR rules and also allow to reference logical resources (including other SGs and event itself)
 - SGs are attached to Elastic Network Interfaces (ENI), when we attach a SG to an EC2, the SG will be attached to the primary ENI
 - SGs are capable to reference logical resources, ex. other security groups or self referencing
+
+## VPC Flow Logs
+
+- Provide details of traffic flow inside of a VPC
+- VPC Flow Logs only capture metadata, they do not capture the content of packets. For capturing content we would need to have a packet sniffer deployed in our VPC
+- Flow Logs works by attaching actual monitors in a VPC. These monitors can be attached at 3 different levels:
+    - VPC level: monitors every network interface in every subnet
+    - Subnet level: monitors every network interface in the subnet
+    - ENIs directly: monitor a specific interface only
+- Flow Logs are not realtime, we can't rely on Flow Logs to offer real time telemetry
+- Flow Logs can be configured to save data in different destinations. Currently S3 and CloudWatch Logs are supported
+- We can use Athena if we want to query Flow Logs in an S3 bucket using a SQL-like query language
+- FLow Logs can be configured to capture metadata on only `ACCEPT`ed connections, only `REJECT`ed connections or capture ALL metadata
+- Flow Logs product capture Flog Log Records, which contain the following fields:
+    - Version
+    - Account ID
+    - Interface ID
+    - Srcaddr: source IP address
+    - Dstaddr: destination IP address
+    - Srcport: source port
+    - Dstort: destination port
+    - Protocol: 
+        - 1 - `ICMP`
+        - 6 - `TCP`
+        - 17 - `UDP`
+    - Packets
+    - Bytes
+    - Start
+    - End
+    - Action: `ACCEPT` or `REJECT`. Traffic is accepted or rejected
+    - Log-status
+- VPC Flow logs exclude the following traffic from logging:
+    - Requests to `169.254.169.254`, `169.254.169.123`
+    - DHCP traffic
+    - Requests to Amazon DNS server
+    - Requests to Amazon Windows License server
