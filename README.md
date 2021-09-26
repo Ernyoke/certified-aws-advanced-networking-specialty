@@ -11,6 +11,8 @@
     - [Route 53 Fundamentals](01-fundamentals/route53.md)
     - [VLANs, Trunks and Q-in-Q](01-fundamentals/vlan.md)
     - [Jumbo Frames and MTU](01-fundamentals/jumbo.md)
+2. Virtual Private Cloud - Deep Dive
+    - [VPC](02-vpc/vpc.md)
 
 ## Exam Description
 
