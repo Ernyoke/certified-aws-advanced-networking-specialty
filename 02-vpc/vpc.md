@@ -99,3 +99,29 @@
 - RT have routes, routes have an order, the most specific route wins
 - Edge Association: a RT tables is associated with network gateway
 - All RTs have at least one route: the local route which matches the VPC cidr range. These routes are un-editable
+
+## NACL - Network Access Control Lists
+
+- A NACL can be considered to be a traditional firewall in an AWS VPC
+- NACLs are associated with subnets, every subnet has a NACL associated to it
+- Connection inside a subnet are not affected by NACLs
+- NACls can be considered stateless firewalls, so we can talk about the following type of rules:
+    - **Inbound rules**: affect data coming into the subnet
+    - **Outbound rules**: affects data leaving from the subnet
+- Rules can explicitly **ALLOW** and explicitly **DENY** traffic
+- Rules are processed in the following order:
+    1. A NACL determines if a the inbound or outbound rules apply
+    2. It starts from the lower rule number, evaluates traffic against each rule until is a match (based on IP range, port, protocol)
+    3. Traffic is allowed/denied based on the rule
+- Last rule is an implicit deny in every NACL, if no rule before that applies, traffic will be denied
+- Default NACL: when a VPC is created, a default NACL is attached to it. The default NACL is allowing all traffic
+- Custom NACL: we can create them and attach them to subnets. The default NACL denies by default all traffic. Can be associated with many different subnet, however each subnet can have only one NACL associated to it at any time
+- NACL are not aware af any logical resources within a VPC, they are aware of IPs, CIDRs and protocols
+
+## SG - Security Groups
+
+- Security Groups are stateful firewalls, meaning they detect response traffic to a request and they automatically allow it
+- SGs do not have explicit **DENY** rules, they can not be used to block bad actors (use NACLs for this)
+- SGs support IP/CIDR rules and also allow to reference logical resources (including other SGs and event itself)
+- SGs are attached to Elastic Network Interfaces (ENI), when we attach a SG to an EC2, the SG will be attached to the primary ENI
+- SGs are capable to reference logical resources, ex. other security groups or self referencing
