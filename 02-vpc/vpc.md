@@ -177,3 +177,34 @@
 - We can enable IPv6 on specific subnets only
 - We can point IPv6 traffic to internet gateway and egress only internet gateways as well
 - Not every service in AWS supports IPv6!
+
+## IGW - Internet Gateway
+
+- IGWs can be created and attached to AWS VPCs, but they are not mandatory, essentially making the VPC private
+- IGWs have a 1 to 1 relationship with VPCs, 1 IGW can be attached to only 1 VPC, VPCs can have 0 or 1 IGWs
+- Architecturally internet gateways are at the border of the VPC and the AWS public zone
+- IGWs are used to access AWS public services and the public internet
+- IGWs are highly available by default and the do scale by default. They are managed by AWS
+- IGW works with IPv4 and IPv6 for both inbound and outbound traffic
+- With IPv4 the IGW performs 1:1 static NAT
+- For both IPv4 and IPv6 the IGW routes traffic in and out of the VPC
+- Fop IPv6 the internat gateway routes packets in and out of the VPC with no modifications
+- Traffic routed for public AWS services through the IGW does not live the AWS network
+- Making a subnet public:
+    1. Create an IGW and attach it to the VPC
+    2. Create a custom route table and associate it to the subnet we want to make public
+    3. Create some default routes
+    4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
+- For IPv6 the 4. step does not apply
+- Static NAT:
+
+## Egress-Only Internet Gateway
+
+- It is an internet gateway only allowing traffic from the inside of a VPC to the outside world
+- With IPv4 addresses are either private or public, private addresses can not directly communicate to the public internet while public instances can communicate to the public internet and be communicated with from the public internet
+- NAT gateway allows private IPs to access the public internet, but without allowing externally initiated connections
+- NAT exists because of limitations of IPv4, it does not work for IPv6
+- With IPv6 all IPs are publicly routable, meaning an IGW will allow all IPs to communicate out and to handle incoming requests
+- Egress-Only Internet Gateways allow IPv6 traffic to be initiated out from the VPC, but they are not allow inbound connections
+- With normal IGW, instances can connect out and external instances can connect in. With Egress-Only IGW, instances from the VPC can initiate connections to the outside, but they can not be connected to from the outside
+- IGWs are stateful devices, they allow responses to outgoing traffic
