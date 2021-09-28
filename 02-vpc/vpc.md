@@ -197,7 +197,6 @@
     4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
 - For IPv6 the 4. step does not apply
 - Static NAT:
-
 ## Egress-Only Internet Gateway
 
 - It is an internet gateway only allowing traffic from the inside of a VPC to the outside world
@@ -208,3 +207,35 @@
 - Egress-Only Internet Gateways allow IPv6 traffic to be initiated out from the VPC, but they are not allow inbound connections
 - With normal IGW, instances can connect out and external instances can connect in. With Egress-Only IGW, instances from the VPC can initiate connections to the outside, but they can not be connected to from the outside
 - IGWs are stateful devices, they allow responses to outgoing traffic
+
+## Bring your own IP Address (BYOIP)
+
+- AWS owns IPv4 and IPv6 addresses we can use
+- For IPv4 we can use them as elastic IP addresses (on EC2, NATGW, etc.)
+- For IPv6 we can assign them directly to the VPC
+- IP addresses which are allocated to our resources are owned by AWS. They are not portable, we can't use them on-premises
+- Because AWS own these IP addresses, they are advertising them via BGP and they are authorized to do so
+- As an organization, we can control IPv4 and IPv6 ranges, meaning that we allocated these ranges via an regional internet registry (RIR)
+- If we control these addresses, we can port them into AWS and we can authorize AWS to BGP advertise them from ASN 16509 and 14618
+- The internet will see these addresses as within AWS
+- BYOIP steps:
+    1. and 2. Key Pair and Cert
+        - Create a an RSA (AES256) private key and a corresponding public key
+        - Generate a x509 certificate signed with the private key
+            - The only mandatory field is the common name
+        - Register with the Resource Public Key Infrastructure (RPKI) - requests made are signed with the private key 
+    3. Route Origin Authorization (ROA)
+        - We have a Regional Internet Registry (RIR) allocated address
+        - Route Origin Authorization: we can think of as a document which contains the IP range together with who is authorized the advertise it
+        - Sign the ROA and provide it to the registry (RIR)
+    4. RDAP Record
+        - Core router: perform origin validation to make sure advertisements are valid
+        - RDAP record is updated with the address space within the RIR, self-signed certificate is added to the RIR record
+        - RDAP provides a protocol for anybody to be able to identify who is allowed to advertise an IP range
+    5. and 6. Provision and Advertise
+        - Create an authorization message for AWS and sign it with the private key
+        - AWS uses RDAP to verify the control of the IP range
+- The most specific IPv4 address rage we can bring into AWS is a /24, and for IPv6 is /48 for publicly routable ranges and /56 for CIDRs that are not publicly advertised
+- BYOIP is one region at a time
+- We can import 5 IPv4 and IPv6 ranges per region per account
+- We can not share our IP address range with other accounts using AWS Resource Access Manager (RAM)
