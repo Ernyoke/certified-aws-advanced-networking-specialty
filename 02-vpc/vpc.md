@@ -239,3 +239,29 @@
 - BYOIP is one region at a time
 - We can import 5 IPv4 and IPv6 ranges per region per account
 - We can not share our IP address range with other accounts using AWS Resource Access Manager (RAM)
+
+## Bastion Hosts
+
+- Is a server which runs at a network edge
+- It is hardened to withstand attacks from public networks
+- Acts as a gatekeeper between two different zones (public => private)
+- A **jumpbox** is a generic term used for a server between two or more networking zones. It allows to jump between networks using this server
+- A bastion host is a subset o jumpboxes, it runs between public and private networks and it is hardened
+- A bastion host is essentially used an an ingress control point, a single hole at the perimeter of a private network. It is extensively logged, it has some form of authentication (SSH, ID federation) and has tightly controlled network security
+
+## NAT Instances
+
+- Before the introduction of the NAT Gateways, this was the recommended way to give internet access to resources from private networks
+- It is just a normal EC2 instances configured to provide NAT services
+- It is no more recommended to use without any specific reason, it is running Amazon Linux 2018.03
+- NAT instances are non-specialized, there are EC2 instances running  NAT software
+- The speed we get from a NAT instance is based on size and type of EC2 instances
+- With EC2 instances for NAT we have to disable traffic source/destination checks, otherwise the packets will be dropped
+- With NAT instances we can have SG on the ENI and NACLs on the subnet
+- NAT instances can save costs by being able to be configured as bastion instances
+- NAT instances are self managed
+- NAT instances do not have built-in resilience! We can use scripts to implement high availability!
+- For logging/monitoring we can use Flow Logs
+- NAT instances work across DX, VPN and Peering connections
+
+## NAT Gateway
