@@ -264,7 +264,7 @@
 - For logging/monitoring we can use Flow Logs
 - NAT instances work across DX, VPN and Peering connections
 
-## NAT Gateway
+## NAT Gateways
 
 - AWS recommended way of doing NAT process in a VPC
 - The NAT gateway itself does not have a public IP address, the communication with the public internet happens through the IGW

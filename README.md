@@ -13,6 +13,7 @@
     - [Jumbo Frames and MTU](01-fundamentals/jumbo.md)
 2. Virtual Private Cloud - Deep Dive
     - [VPC](02-vpc/vpc.md)
+    - [VPC Endpoints](02-vpc/vpc-endpoints.md)
 
 ## Exam Description
 
