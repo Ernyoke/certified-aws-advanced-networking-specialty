@@ -265,3 +265,18 @@
 - NAT instances work across DX, VPN and Peering connections
 
 ## NAT Gateway
+
+- AWS recommended way of doing NAT process in a VPC
+- The NAT gateway itself does not have a public IP address, the communication with the public internet happens through the IGW
+- The NAT gateway communicates with the IGW while all the public traffic is routed from the private VPC to the NAT GW
+- NAT gateways needs to run from a public subnet because it requires to use an static IPv4 address to be able to do network address translation
+- NAT GW are AZ resilient services (HA is provided in the AZ)
+- For region resilience we need to deploy NAT gateways in each AZ we use and point the route table to redirect traffic to NAT gateways in the specific regions
+- NAT gateway are not expensive but they can get costly if we have a lot of AZs
+- NAT gateways are managed by AWS, they provide 5Gbps by default, they can scale up to 45Gbps. We can have multiple NAT GWs in a single AZ for traffic splitting
+- With NAT gateways we are paying for each instance per duration of usage + there is data ingestion cost
+- NAT gateways are using Elastic IP addresses, the IP address can not be changed. If we want to change the IP address, we need to provision a new NAT GW
+- NAT gateways can not be used across VPC peers, Site-to-Site VPN connections or AWS Direct Connect (NAT instances can be used!!!)
+- A NAT GW can handle 55000 simultaneous connections to each unique destination. If we reach this point, we may run into port allocation error, this can be monitored with `ErrorPortAllocation' metric
+- NAT gateways inquire data transfer costs even when we are using them for accessing AWS services. Use gateway endpoints for accessing S3/DynamoDB, they inquire no additional cost
+- **We can't use security groups on the NAT gateways!**
