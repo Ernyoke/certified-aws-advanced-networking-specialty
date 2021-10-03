@@ -40,3 +40,30 @@
 - One way to get around this performance hit is to use device passthrough (1 VM <=> 1 NIC). This limits the ability to migrate the instance and impacts the ability of the VM to cope with other HA events
 - Other option is SR-IOV: allows multiple VMs to access the same NIC without performance hits
 - This feature is implemented as Enhanced Networking in EC2 and is supported across all types of EC2 instances. It is required for higher performance, especially for certain placement groups
+- Device (PCI) Passthrough:
+
+    ![PCI Passthrough Architecture](images/EnhancedNetworking2.png)
+
+- Enhanced Networking Architecture (SR-IOV):
+    - The network interface cards are virtual aware
+    - Each network card is creating virtual function (virtual network cards)
+    - This functions offer a cut-down feature set enough to send/receive data
+    - The management of the overall card is performed by the physical functions offering full functionality
+    - Each physical device can offer up to 256 virtual functions
+    - The hypervisor is not involved in networking coordination at all, the performance being near to bear-metal
+    - Because the hypervisor is not involved, it means better speed, better packets/sec more consistent speeds and less CPU involvement across the board
+
+    ![Enhanced Networking Architecture](images/EnhancedNetworking3.png)
+
+## Network Performance within AWS
+
+- We should use enhanced networking for anything beyond base level performance requirements
+- If we have 2 instances communicating over the network, the best performance we can achieve is the lowest common denominator (we cannot have better speeds than the maximum capability of the slower instance)
+- Factors which can influence an instance's network speed is the size and type of the instance. Larger sizes generally offer better network performance
+- We can have different types of ENIs: older ENI up to 10GBps, newer up to 100Gbps
+- Other much performance caps:
+    - Instance in the same region: performance is dictated by the lowest performing instance
+    - Instances in different regions can have a max aggregate performance bandwidth quota of 5Gbps
+    - 5 Tuple (SRC IP, DST IP, SRC Port, DST Port & Protocol): Single Flow between A and B limit is 5Gbps MAX. Ways around this: Multi-path TCP (MPTCP), other protocols which support multiple streams
+
+    ![Network Performance within AWS](images/EnhancedNetworking4.png)
