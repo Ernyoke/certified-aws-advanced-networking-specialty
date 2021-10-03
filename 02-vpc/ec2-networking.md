@@ -28,3 +28,15 @@
     - Different network interfaces for security and network appliances
     - Multiple network interfaces for multi-homed instances with workloads/roles on specific subnets
     - Implement a low budget and simple HA solutions
+
+## EC2 Enhanced Networking (SR-IOV)
+
+- SR-IOV - Single Route IO-Virtualization
+- Networking in EC2 is traditionally virtualized
+- With VM generally each physical network interface (NIC) is shared between instances, and the hypervisor mediates access between the instances
+- Wether an OS is running in a virtualized environment or physical environment, it expects to have direct access to the NIC
+- It uses a special type of instruction know as privileged instructions. These means that the os has direct access to the HW
+- In case of hypervisor, it looks for these calls and it traps them and redirects them to the physical HW. These process comes with a performance hit
+- One way to get around this performance hit is to use device passthrough (1 VM <=> 1 NIC). This limits the ability to migrate the instance and impacts the ability of the VM to cope with other HA events
+- Other option is SR-IOV: allows multiple VMs to access the same NIC without performance hits
+- This feature is implemented as Enhanced Networking in EC2 and is supported across all types of EC2 instances. It is required for higher performance, especially for certain placement groups
