@@ -67,3 +67,26 @@
     - 5 Tuple (SRC IP, DST IP, SRC Port, DST Port & Protocol): Single Flow between A and B limit is 5Gbps MAX. Ways around this: Multi-path TCP (MPTCP), other protocols which support multiple streams
 
     ![Network Performance within AWS](images/EnhancedNetworking4.png)
+
+## EFA - Elastic Fabric Adapter
+
+- Is a type of ENI for EC2
+- We can have 1 of this type per instance
+- Can be added when the instance is launched or when the instance is in a shutdown state
+- EFI support **OS Bypass**: provides lower and more consistent latency and higher throughput than the TCP transport; it enhances the performance of inter-instance communication for scaling HPC and ML applications
+- EFA removes the OSI stack specification from the communication which in this case gets in the way of performance
+- Any HPC or ML application which uses MPI or NCCL are candidates for using an EFA attached to the EC2 instance
+- EFAs provide the traditional networking features are ENIs, but they also provide these OS bypass capabilities
+- EFA compared to traditional 7 layer stack:
+
+    ![EFA Compared to OSI](images/EFA1.png)
+
+- EFA architecture:
+
+    ![EFA](images/EFA1.png)
+
+- Limitations of OS Bypass:
+    - It is single subnet only
+    - EFAs can be used for cross subnet/AZ works but this will be normal IP traffic
+    - OS Bypass traffic cannot be routed
+    - Security Group attached to the instances needs an ALLOW ALL, self-referential rule for INBOUND and OUTBOUND traffic
