@@ -11,7 +11,7 @@
     - [Route 53 Fundamentals](01-fundamentals/route53.md)
     - [VLANs, Trunks and Q-in-Q](01-fundamentals/vlan.md)
     - [Jumbo Frames and MTU](01-fundamentals/jumbo.md)
-2. Virtual Private Cloud - Deep Dive
+2. Virtual Private Cloud
     - [VPC](02-vpc/vpc.md)
     - [VPC Endpoints](02-vpc/vpc-endpoints.md)
     - [Advanced EC2 Networking](02-vpc/ec2-networking.md)
