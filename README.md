@@ -14,6 +14,7 @@
 2. Virtual Private Cloud - Deep Dive
     - [VPC](02-vpc/vpc.md)
     - [VPC Endpoints](02-vpc/vpc-endpoints.md)
+    - [Advanced EC2 Networking](02-vpc/ec2-networking.md)
 
 ## Exam Description
 
