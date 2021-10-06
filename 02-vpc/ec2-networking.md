@@ -137,3 +137,16 @@
 - We can launch as many instances as we need in a partition group
 - Use cases for partition groups: HDFS, HBase, Cassandra, topology aware applications
 - Instances can be placed in a specific partition or we can let AWS to decide
+
+## Instance Metadata
+
+- Is a service provider by AWS to the EC2 instances
+- It is data about the instance used to configure/manage the instance
+- It is accessible from all the instances by accessing `http:/169.254.169.254` address
+- Access latest metadata for the instance: `http:/169.254.169.254/latest/meta-data`
+- Information that can be accessed by using instance metadata:
+    - Information about the environment
+    - Networking
+    - Authentication
+- Metadata is also used to grant access to user data
+- The metadata service in not encrypted and it not requires authentication
