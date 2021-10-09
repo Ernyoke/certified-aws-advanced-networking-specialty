@@ -15,6 +15,8 @@
     - [VPC](02-vpc/vpc.md)
     - [VPC Endpoints](02-vpc/vpc-endpoints.md)
     - [Advanced EC2 Networking](02-vpc/ec2-networking.md)
+3. Networking Automation
+    - [CloudFormation](03-networking-automation/cloudformation.md)
 
 ## Exam Description
 
