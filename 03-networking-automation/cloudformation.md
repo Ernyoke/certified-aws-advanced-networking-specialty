@@ -48,3 +48,38 @@
         - `Fn::Sub`: allows to substitute some values (marked with `${value}`) in text 
     - `Fn::Cidr`: configure/build CIDR ranges
         - Usage: `!Cidr[!GetAtt [VPC.CidrBlock, "16", "12]]`: cidr block, how many subnets, bits per CIDR
+
+## CloudFormation Mappings
+
+- Templates can contain a `Mappings` top level objects, which can contain many mappings, key value pairs allowing lookups
+- Mappings can have one level of lookup or top and second level keys
+- Mappings use the `Fn::FindInMap` intrinsic function to retrieve elements from the maps
+- Mappings are used to improve template portability
+- Common use case for mappings is retrieval of AMIs for given region and architecture
+- `FindInMap` usage: `!FindInMap [ MapName, TopLevelKey, SecondLevelKey ]`
+    - We always need to provide a top level key
+    - Second level key is optional
+
+## CloudFormation Outputs
+
+- They are top level objects, they are optional
+- Used for provide status information or show how to access services provisioned by the CF stack
+- Outputs can be visible when using the CLI, console UI or they can be accessible from a parent stack when using nesting
+- Outputs can be exported, allowing cross-stack references
+
+## CloudFormation Conditions
+
+- Allows a stack to react to certain condition and change infrastructure based on those specific conditions
+- Conditions are declared in the optional `Condition` section of a template
+- We can define many conditions in that section, the end effect being that all conditions are evaluated to either true of false
+- Conditions are processed before resources being created
+- Conditions use other intrinsic functions like `AND`, `EQUALS`, `IF`, `NOT`, `OR`
+
+## CloudFormation `DependsOn`
+
+- Allows us to establish explicit dependencies between CloudFormation resources
+- CloudFormation be default tries to do things (create, update, delete) in parallel, while trying to determine a dependency order between resources
+- Dependency order is determined based on references and functions
+- `DependsOn` lets us explicitly define if resource B and C depend on resource A. This will result for a wait time for both B and C while A is being created
+- One common exception when CF can not detect the dependency between resources is when we want to create an Elastic IP and associate it to an EC2. We cannot attach an Elastic IP before an internet gateway is attached to a VPC
+- `DependsOn` accepts a single resource or array of resources
