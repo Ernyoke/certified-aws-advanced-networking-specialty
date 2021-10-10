@@ -112,3 +112,13 @@
     - Use nested stacks when we have modular templates
     - Use nested when we want to make stack installation process easier
     - Only use nested stack when everything is lifecycle linked
+
+## CloudFormation Cross-Stack References
+
+- Stacks are by design self-contained and isolated, having a logical boundary around each stack
+- Resources from one stack can not be automatically references in another stack
+- Cross-Stack references allow one stack to reference resources from another stack
+- Normally the outputs of a stack are not visible from another stack, only nested stacks can reference them
+- In order to make outputs visible to every other stack, we can export them
+- Exports must have unique name in a region, every region of every account can have its own list of exports
+- To use the export, we have to import them with `Fn::ImportValue` function
