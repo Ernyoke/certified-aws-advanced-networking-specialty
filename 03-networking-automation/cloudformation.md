@@ -9,25 +9,25 @@
 - For every logical resource in a template a physical, a physical resource is created. If the logical resource is updated, the physical resource is also updated. If the stack is deleted, the physical resources will also will be deleted
 - Once a logical resource moves in a create complete state (meaning the physical resource successfully created), than the logical resource can be references by other logical resources
 
-    ![CF Physical and Logical Resources](images/CloudFormationLogicalAndPhysicalResources.png)
+    ![CFN Physical and Logical Resources](images/CloudFormationLogicalAndPhysicalResources.png)
 
 ## CloudFormation Template and Pseudo Parameters
 
-- Template and pseudo parameters allow input, letting external sources provide input into CF
+- Template and pseudo parameters allow input, letting external sources provide input into CFN
 - Example of inputs: size of an EC2 instance, environment, etc.
 - Inputs are defined together with logical instances in the templates and they can be references from within logical resources
 - For every parameter we can define configurations like:
     - Default values
     - Allowed values and restrictions: `Min`, `Max`, length and `AllowedPatterns`, `NoEcho` (useful for passwords), `Type` (parameter types: String, Number, List, AWS specific types)
 
-    ![CF Template Parameters](images/CloudFormationTemplateParameters.png)
+    ![CFN Template Parameters](images/CloudFormationTemplateParameters.png)
 
 - Pseudo parameters: parameters which are provided by AWS, examples:
     - `AWS::Region`
     - `AWS::StackId`
     - `AWS::StackName`
     - `AWS::AccountId`
-- Pseudo parameters does not need to be defined in the CF `Parameters` section. They are automatically injected into our templates by AWS
+- Pseudo parameters does not need to be defined in the CFN `Parameters` section. They are automatically injected into our templates by AWS
 - Both type of parameters ensure that our stacks are portable and can adjust based on input from the person/process creating the stack
 - We should aim to minimize the parameters which require explicit inputs. Instead we should use default values and pseudo parameters provided by AWS
 
@@ -63,7 +63,7 @@
 ## CloudFormation Outputs
 
 - They are top level objects, they are optional
-- Used for provide status information or show how to access services provisioned by the CF stack
+- Used for provide status information or show how to access services provisioned by the CFN stack
 - Outputs can be visible when using the CLI, console UI or they can be accessible from a parent stack when using nesting
 - Outputs can be exported, allowing cross-stack references
 
@@ -81,5 +81,34 @@
 - CloudFormation be default tries to do things (create, update, delete) in parallel, while trying to determine a dependency order between resources
 - Dependency order is determined based on references and functions
 - `DependsOn` lets us explicitly define if resource B and C depend on resource A. This will result for a wait time for both B and C while A is being created
-- One common exception when CF can not detect the dependency between resources is when we want to create an Elastic IP and associate it to an EC2. We cannot attach an Elastic IP before an internet gateway is attached to a VPC
+- One common exception when CFN can not detect the dependency between resources is when we want to create an Elastic IP and associate it to an EC2. We cannot attach an Elastic IP before an internet gateway is attached to a VPC
 - `DependsOn` accepts a single resource or array of resources
+
+## CloudFormation Nested Stacks
+
+- Designing infrastructure in a single CFN is stack is fine until we run into certain limits, which are:
+    - 500 resources per stack
+    - Can easily reuse resources (example: a VPC)
+- In order to overcome these limitations we can use a multi-stack architecture
+- There are 2 types of multi-stack approaches:
+    - Nested stacks
+    - Cross-stack references
+- CFN nested stack are simple to understand:
+    - We have a root stack which is created first, which is also a parent stack
+    - A parent stack is the parent of any stack which it immediately creates (anything which has a nested stack)
+    - Root stacks can have parameters and outputs, like any normal stack
+
+    ![CFN Nested Stacks](images/CloudFormation-NestedStacks.png)
+
+- In order to have nested stacks, CFN provides a resource named `AWS::CloudFormation::Stack`. This can be used similarly as any other logical resource
+- Nested stack resources can also receive some parameters. Parameters in the nested stack can also have default values, but is best practice to give values to any exposed parameters
+- Any output from the nested stack is returned to the parent stack, which can be referenced by the parent stack
+- Nested stacks can also have dependencies between them. These dependencies can be implicit (pass output from one stack as a param for other stack) or explicit using `DependsOn`
+- Nested stacks vs Cross-stack references:
+    - Nested stacks are reusing the code (by referencing the template as a logical resource), they are not reusing an already created stack
+    - Nested stacks are generally used when all the infrastructure has the same lifecycle
+- Benefits of CFN nested stacks:
+    - Use nested stacks when we need to overcome the resource limit (500 resources per stack)
+    - Use nested stacks when we have modular templates
+    - Use nested when we want to make stack installation process easier
+    - Only use nested stack when everything is lifecycle linked
