@@ -17,6 +17,8 @@
     - [Advanced EC2 Networking](02-vpc/ec2-networking.md)
 3. Networking Automation
     - [CloudFormation](03-networking-automation/cloudformation.md)
+4. Elastic Load Balancing - Deep Dive
+    - [ELB - Elastic Load Balancer](04-elb/elb.md)
 
 ## Exam Description
 
