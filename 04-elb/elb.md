@@ -62,3 +62,37 @@
     - They can be allocated with static IP addresses
     - They can forward TCP straight through the instances => unbroken encryption
     - NLBs can be used for PrivateLink
+
+## Connection Draining and Deregistration Delay
+
+- Connection draining is a setting which controls what happens when instances become unhealthy or deregistered
+- Normally all connections are closed and the instance receives not new connections
+- Connection draining allows in-flight requests to complete before the instance being terminated
+- It is a way of gracefully removing connections in order to reduce disruptions
+- Connection draining is supported in Classic Load Balancer only!
+- Connection draining is a timeout value between 1 and 3600 seconds (default: 300)
+- If an instance is taken out of service, it is listed in "InService: Instance deregistration in progress"
+- If we are using an ASG, it will wait for all connections to complete or timeout
+- Deregistration Delay: same feature as connection draining supported on NLB, ALB and Gateway Load Balancers (GWLB) with subtle differences
+- Deregistration Delay is defined on target groups, not on load balancers
+- It is enabled by default, default value being 300 and having a range between 0 and 3600 seconds
+
+## `X-Forwarded-For` and `PROXY` Protocol
+
+- Clients connects to load balancers and load balancers to backend services
+- Load balancers tend to mask the IP address of clients who are talking with our backend services
+- In order to pass the IP address to the backend service, we can use `X-Forwarded-For` header
+- `X-Forwarded-For` is a HTTP header, which is appended by proxies/load-balancers to the request
+- `X-Forwarded-For` can contain a list of IP addresses, containing all the addresses from which the requests are redirected
+- This header is supported by CLB and ALB
+- For non HTTP/S communication we can use the `PROXY` protocol for the same purpose
+- `PROXY` protocol is an additional layer 4 TCP header
+- There are two versions of `PROXY` protocol: v1(CLB) and v2 (NLB - binary encoded)
+- Usage for `PROXY` protocol: unbroken encryption (HTTPS)
+
+## Load Balancer Security Policies
+
+- A security policy is a set of ciphers and protocols which we configure on the listener of the LB
+- Defines which ciphers and protocols the LB can use
+- Protocol ensures secure client-server communication (can use many ciphers)
+- Cipher is an algorithm to encrypt/decrypt data
