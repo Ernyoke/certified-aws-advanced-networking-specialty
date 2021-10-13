@@ -19,6 +19,7 @@
     - [CloudFormation](03-networking-automation/cloudformation.md)
 4. Elastic Load Balancing - Deep Dive
     - [ELB - Elastic Load Balancer](04-elb/elb.md)
+    - [GWLB - Gateway Load Balancers](04-elb/gwlb.md)
 
 ## Exam Description
 
