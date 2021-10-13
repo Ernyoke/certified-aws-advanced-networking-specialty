@@ -96,3 +96,8 @@
 - Defines which ciphers and protocols the LB can use
 - Protocol ensures secure client-server communication (can use many ciphers)
 - Cipher is an algorithm to encrypt/decrypt data
+- Client and server present ciphers/protocols which they support. From the overlap between those 2 the best supported one is picked
+- In case of the LB we control the policy between the client and LB
+- An AWS chosen one is used between the LB and the targets (example: `ELBSecurityPolicy-2016-08`)
+- Newer policies are more secure, but they are usually less compatible
+- If we must ensure that we have forward secrecy, we can chose an alternate: `ELBSecurityPolicy-FS`
