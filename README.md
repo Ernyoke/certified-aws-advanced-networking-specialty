@@ -28,6 +28,7 @@
     - [S3 Access Points](07-security/s3-access-points.md)
     - [CloudTrail](07-security/cloudtrail.md)
     - [`ip-ranges.json`](07-security/ip-ranges.md)
+    - [AWS Shield and Web Application Firewall (WAF)](07-security/shield-and-waf.md)
 
 ## Exam Description
 
