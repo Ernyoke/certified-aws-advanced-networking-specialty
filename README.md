@@ -29,6 +29,7 @@
     - [CloudTrail](07-security/cloudtrail.md)
     - [`ip-ranges.json`](07-security/ip-ranges.md)
     - [AWS Shield and Web Application Firewall (WAF)](07-security/shield-and-waf.md)
+    - [URL Filtering in a VPC](07-security/url-filtering.md)
 
 ## Exam Description
 
