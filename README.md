@@ -22,6 +22,10 @@
     - [GWLB - Gateway Load Balancers](04-elb/gwlb.md)
 5. Route 53 - Deep Dive
     - [Route 53](05-r53/r53.md)
+6. Network Content Delivery (CDN) in AWS
+    - [CloudFront](06-cdn/cloudfront.md)
+7. Network Security, Risk and Compliance
+    - [S3 Access Points](07-security/s3-access-points.md)
 
 ## Exam Description
 
