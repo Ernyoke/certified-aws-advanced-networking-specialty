@@ -20,6 +20,8 @@
 4. Elastic Load Balancing - Deep Dive
     - [ELB - Elastic Load Balancer](04-elb/elb.md)
     - [GWLB - Gateway Load Balancers](04-elb/gwlb.md)
+5. Route 53 - Deep Dive
+    - [Route 53](05-r53/r53.md)
 
 ## Exam Description
 
