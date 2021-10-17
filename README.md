@@ -27,6 +27,7 @@
 7. Network Security, Risk and Compliance
     - [S3 Access Points](07-security/s3-access-points.md)
     - [CloudTrail](07-security/cloudtrail.md)
+    - [`ip-ranges.json`](07-security/ip-ranges.md)
 
 ## Exam Description
 
