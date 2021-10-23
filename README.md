@@ -24,6 +24,7 @@
     - [Route 53](05-r53/r53.md)
 6. Network Content Delivery (CDN) in AWS
     - [CloudFront](06-cdn/cloudfront.md)
+    - [ACM - AWS Certificate Manager](06-cdn/acm.md)
 7. Network Security, Risk and Compliance
     - [S3 Access Points](07-security/s3-access-points.md)
     - [CloudTrail](07-security/cloudtrail.md)
