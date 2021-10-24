@@ -15,6 +15,7 @@
     - [VPC](02-vpc/vpc.md)
     - [VPC Endpoints](02-vpc/vpc-endpoints.md)
     - [Advanced EC2 Networking](02-vpc/ec2-networking.md)
+    - [VPC Peering](02-vpc/vpc-peering.md)
 3. Networking Automation
     - [CloudFormation](03-networking-automation/cloudformation.md)
 4. Elastic Load Balancing - Deep Dive

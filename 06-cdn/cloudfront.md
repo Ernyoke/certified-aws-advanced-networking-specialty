@@ -186,6 +186,7 @@
 - Field-Level encryption happens separately from the HTTPS tunnel
 - A private key is needed to decrypt individual fields
 - Field-Level encryption architecture:
+
     ![Field-Level encryption architecture](images/FieldLevelEncryption2.png)
 
 ## Lambda@Edge
