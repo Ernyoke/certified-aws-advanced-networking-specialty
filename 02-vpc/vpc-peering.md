@@ -21,3 +21,13 @@
     - DNS resolution supports:
         - Requester DNS resolution
         - Accepter DNS resolution
+
+## VPC Peering Unsupported Configurations
+
+- The following configurations are not supported by VPC peering:
+    - Overlapping CIDR blocks
+    - Transitive peering: if A is peered with B and B is peered with C, this does not mean that A and C are also peered
+    - Edge to edge routing: edge routing with Site2Site VPN or DX is not supported
+- Handle overlapping CIDR blocks:
+    - Split routing in VPC per subnets with different route tables
+    - Use more specific routes (longest prefix wins) in case of overlaps
