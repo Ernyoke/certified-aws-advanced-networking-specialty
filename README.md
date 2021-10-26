@@ -32,7 +32,8 @@
     - [`ip-ranges.json`](07-security/ip-ranges.md)
     - [AWS Shield and Web Application Firewall (WAF)](07-security/shield-and-waf.md)
     - [URL Filtering in a VPC](07-security/url-filtering.md)
-
+8. Hybrid Networking
+    - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
 ## Exam Description
 
 The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:g
