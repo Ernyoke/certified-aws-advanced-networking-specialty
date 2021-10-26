@@ -13,9 +13,10 @@
 - Static vs Dynamic VPN:
     - **Dynamic VPN** uses BGP protocol, if customer router does not support BGP, we can not use dynamic VPNs
     - **Static VPN** uses static network configuration: static routes are added to the route tables AWS side, static networks has to be identified on the VPN connection on-premise side. It is simple, it just uses IPSec, works anywhere, having limitation on terms of HA
-    - Dynamic VPN uses BGP. Allows routing on the fly, allows multiple links to be used at once between the same locations. Allows using HA available architectures.
+    - Dynamic VPN uses BGP: allows routing on the fly, allows multiple links to be used at once between the same locations. Allows using HA available architectures.
         - Route propagation: if enabled means that routes are added ro the Route Table automatically
-- Speed Limitation for VPN: *1.25 Gbps*, AWS limitation
-- Latency considerations: inconsistent, traffic goes through the public internet
-- Cost: hourly cost for outgoing traffic
-- VPN can be used for Direct Connect backup or they can be used over the Direct Connect for adding a layer of encryption
+- Considerations for VPN:
+    - Speed Limitation for VPN: *1.25 Gbps*, AWS limitation
+    - Latency considerations: inconsistent, traffic goes through the public internet
+    - Cost: hourly cost for outgoing traffic
+    - VPN can be used for Direct Connect backup or they can be used over the Direct Connect for adding a layer of encryption
