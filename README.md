@@ -37,6 +37,7 @@
     - [VGW - Virtual Private Gateway](08-hybrid-networking/vgw.md)
     - [AWS Site-to-Site VPN](08-hybrid-networking/vpn.md)
     - [BGP - Border Gateway Protocol](08-hybrid-networking/bgp.md)
+    - [TGW - AWS Transit Gateway](08-hybrid-networking/tgw.md)
 ## Exam Description
 
 The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:g
