@@ -21,6 +21,17 @@
     - Cost: hourly cost for outgoing traffic
     - VPN can be used for Direct Connect backup or they can be used over the Direct Connect for adding a layer of encryption
 
+## Accelerated Site-to-Site VPN
+
+- Performance enhancement for AWS Site-to-Site VPN that uses the AWS global network, the same network used for Global Accelerator and CloudFront
+- Using a classic Site-to-Site VPN, the traffic goes through the public internet. In order to avoid this, some companies use a Site-to-Site VPN over Direct Connect. Direct Connect offers more better performance, but at a higher cost. Since DX is not an option for everybody, accelerated Site-to-Site VPN was created to improve performance compared to classic Site-to-Site VPNs
+- Accelerated Site-to-Site VPN architecture:
+
+![Accelerated Site-to-Site VPN](images/AcceleratedS2SVPN1.png)
+
+- Acceleration can be enabled when creating a Transit Gateway attachment only! Not compatible with VPNs using virtual gateways (VGW)
+- Accelerated Site-to-Site VPN has a fixed accelerator cost fee and a transfer fee
+
 ## Client VPN
 
 - Is a managed implementation of OpenVPN
