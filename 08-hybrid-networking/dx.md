@@ -56,9 +56,9 @@
 
 - MACsec architecture:
 
-    ![MACsec Architecture](images/DXMacSec3.png)
+    ![MACsec Architecture](images/DXMACsec3.png)
 
-    ![MACsec Architecture Extended](images/DXMacSec4.png)
+    ![MACsec Architecture Extended](images/DXMACSec4.png)
 
 - MACsec is not a substitute of IPSEC encryption!
 
