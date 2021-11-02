@@ -40,6 +40,8 @@
     - [TGW - AWS Transit Gateway](08-hybrid-networking/tgw.md)
     - [AWS Global Accelerator](08-hybrid-networking/global-accelerator.md)
     - [Rout Priority and Selection](08-hybrid-networking/route-priority.md)
+    - [DX - Direct Connect](08-hybrid-networking/dx.md)
+    
 ## Exam Description
 
 The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:g
