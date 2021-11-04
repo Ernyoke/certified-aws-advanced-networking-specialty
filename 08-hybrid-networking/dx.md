@@ -62,3 +62,30 @@
 
 - MACsec is not a substitute of IPSEC encryption!
 
+## DX Connection Process
+
+- Letter of Authorization Customer Facility Access (LOA-CFA): it is a form, which gives the authorization to one customer to get the data center staff to connect to the equipment of another customer
+- This form is able to be downloaded by a customer once a DX port has be provisioned within a DX location
+
+## DX Virtual Interfaces BGP Session and VLAN
+
+- DX connections are layer 2 connections (Data Link)
+- We need a way to connect to multiple types of layer 3 (IP) networks (VPC and public zone) over the DX connection
+- VIFs allows us to run multiple layer 3 networks over layer 2 DX connections
+- A VIF is BGP Peering Session isolated within a VLAN
+- VLAN isolates the different layer 3 networks using VLAN tagging
+- BGP exchanges prefixes, each end nodes knows about networks at each side
+- With BGP MD5 authentication we can ensure that only authenticated data is accepted at each side
+- VIFs can have 3 types: Public, Private and Transit
+- Public VIFs are used to connect to public AWS services or services from VPCs with public IP addressing
+- Private VIFs are sued to connect to private VPC resources
+- Transit VIFs allow integration between DX and Transit Gateways
+- A single DX connection can have at total 50 Public/Private VIFs and 1 Transit VIF, for hosted connection we can have 1 VIF
+ 
+    ![DX VIFs + VLAN](images/DXBGPSessonVLAN.png)
+
+- VIF internal components:
+    - VLAN for isolation of traffic
+    - BGP for exchanging prefixes
+    - MD5 authentication
+
