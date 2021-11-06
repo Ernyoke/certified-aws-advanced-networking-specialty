@@ -89,3 +89,32 @@
     - BGP for exchanging prefixes
     - MD5 authentication
 
+## Private VIFs
+
+- They are used to access the resources inside 1 AWS VPC using private IP addresses
+- Resources can be accessed with their private IP using private VIFs, public IPs and Elastic IPs wont work
+- Private VIFs are associated with a Virtual Private Gateway (VGW) which can be associated to 1 VPC. This has to be in the same region where the DX location connection terminates
+- 1 Private VIF = 1 VGW = 1 VPC (there are ways around this using Transit VIFs)
+- There is no encryption on private VIFs, DX is not adding encryption and neither is the private VIFs (there are ways around this, example using HTTPS)
+- With private VIFs we can use normal or Jumbo Frames (MTU of 1500 or 9001)
+- Using VGW, route propagation is enabled by default
+- Creating private VIFs:
+    - Pick the connection the VIF will run over
+    - Chose VGW (default) or Direct Connect Gateway
+    - Chose who owns the interface (this account or another account)
+    - Choose a VLAN id - 802.1Q which needs to match the customer config
+    - We need to enter the BGP ASN of on-premises (public or private). If private use 64512 to 65535
+    - We can choose IPs or auto generate them
+    - AWS will advertise the VPC CIDR range and the BGP Peer IPs (`/30`)
+    - We can advertise default or specific corporate prefixes (**max 100** - this is HARD limit, the interface will go into an idle state)
+- Private VIFs architecture:
+
+    ![DX VIFs + VLAN](images/DXPrivateVIFS.png)
+ 
+ - Key learning objectives:
+    - Private VIFs are used to access private AWS services
+    - Private VIF => 1 VGW => 1 VPC
+    - VPC needs to be in the same region as the DX location
+    - VGW has an AWS assigned
+    - Over the private VIF runs the BGP with IPv4 or IPv6 (separate BPG peering connections)
+    - We configure our own AS on the VIF, which can be private ASN or public ASN
