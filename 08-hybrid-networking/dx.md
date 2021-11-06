@@ -139,3 +139,25 @@
 - Private VIFs architecture:
 
     ![Public VIFs Architecture](images/DXPublicVIFS.png)
+
+## Direct Connect Public VIF + VPN
+
+- Using a VPN gives us an encrypted and authenticated tunnel
+- Architecturally, having a VPN over DX uses a Public VIF + VGW/TGW public endpoints
+- With a VPN we connect to public IPs which belong to a VGW or TGW
+- A VPN is transit agnostic: we can connect using a VPN to VGW or a TGW over the internet or over DX
+- A VPN is end-to-end encryption between a Customer Gateway (CGW) and TGW/VGW, while MACsec is single hop based
+- VPNs have wide vendor support
+- VPNs have more cryptographic overhead compared to MACsec
+- A VPN can be provided immediately, can be used while DX is provisioned and/or as a DX backup
+
+    ![VPN over DX](images/DXPublicVIFVPN.png)
+
+# BFD - Bidirectional Forwarding Detection with Direct Connect
+
+- BFD is used to improve failover times
+- It reduces the time to require to failover between VGWs
+- Without BFD, the failover works as following: BGP sends `Keep-alives` every 30 seconds and has a concept of a hold-down timer (starts from 0 and counts to 90). Whenever a `Keep-alive` is received, the timer is reset. If it reaches 90, the VIF is considered unreachable
+- With BFD, failover can occur in less than a second. BFD has a concept of liveness detection interval (300ms)
+- BFD also has a concept of multiplier (default is 3) => failover can occur in 900ms
+- BFD is enabled on VIFs by default, but in oder to work, it has to be enabled on the customer side using BGP options configuration
