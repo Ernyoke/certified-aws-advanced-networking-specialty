@@ -109,7 +109,7 @@
     - We can advertise default or specific corporate prefixes (**max 100** - this is HARD limit, the interface will go into an idle state)
 - Private VIFs architecture:
 
-    ![DX VIFs + VLAN](images/DXPrivateVIFS.png)
+    ![Private VIFs Architecture](images/DXPrivateVIFS.png)
  
  - Key learning objectives:
     - Private VIFs are used to access private AWS services
@@ -118,3 +118,24 @@
     - VGW has an AWS assigned
     - Over the private VIF runs the BGP with IPv4 or IPv6 (separate BPG peering connections)
     - We configure our own AS on the VIF, which can be private ASN or public ASN
+
+## Public VIFs
+
+- Are used to access AWS public zone services: both public services and services which have a public Elastic IP
+- They offer no direct access to private VPC services
+- We can access all public zone regions with one public VIF across AWS global network
+- AWS advertises all AWS public IP ranges to us, all traffic to AWS services will go over the AWS global network
+- We can advertise any public IPs we own over BGP, in case we don't have public IPs, we can work with AWS support to allocate some to us
+- Public VIFs support bi-directional BGP communities
+- Advertised prefixes are not transitive, our prefixes don't leave AWS
+- Create a public VIF:
+    - We pick the connection the VIF will run over
+    - We chose the interface owner (this account or another)
+    - Chose VLAN - 802.1Q, which needs to match the customer configuration
+    - Chose the customer side BGP ASN (ideally this is public ANS for full functionality)
+    - Configure authentication and select optional peering IP addresses
+    - We have to select which prefixes we want to advertise
+
+- Private VIFs architecture:
+
+    ![Public VIFs Architecture](images/DXPublicVIFS.png)
