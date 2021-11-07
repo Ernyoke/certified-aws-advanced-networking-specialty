@@ -161,3 +161,33 @@
 - With BFD, failover can occur in less than a second. BFD has a concept of liveness detection interval (300ms)
 - BFD also has a concept of multiplier (default is 3) => failover can occur in 900ms
 - BFD is enabled on VIFs by default, but in oder to work, it has to be enabled on the customer side using BGP options configuration
+
+## BGP Communities
+
+- BGP communities are tags attached to those prefixes which are advertised by BGP
+- Extra metadata sent with routes advertised giving some extra information or context about a route
+- Well known, predefined ones:
+    - `NO_EXPORT`: don't advertise to EXTERNAL BGP peers (AWS uses this for incoming)
+    - `NO_ADVERTISE`: do not advertise to ANY peers
+- Regular BGP communities: 32 bit values, split into 2 * 16 portions
+- Format of these is: `AS_NUMBER:OPERATOR_ASSIGNED_VALUE`. Example: `7224:9100`
+- BGP operators act on advertisements based on communities
+- BGP communities are used to provide some level of visibility of the location of route advertisement
+- Summary:
+    - BGP communities control how far AWS advertise our routes
+    - Allow BGP administrators to define rules for how to handle incoming prefix advertisements
+    - Other use: local preference
+
+## Direct Connect Gateways
+
+- Direct Connect is a regional service
+- Once a DX connection is up, we can use public VIFs to access all AWS Public Services in all AWS regions
+- Private VIFs can only access VPCs in the same AWS regions via VGWs
+- Direct Connect Gateway is a global network device: it is accessible in all regions
+- We integrate with it on the on-premises side by creating a private VIF and associate this with a DX Gateway instead of the Virtual Private Gateway (VGW). This integrates the on-premises router with the DX Gateway
+- On the AWS side we create VGW associations in any VPC in any AWS regions
+- DX gateways allow to route through them to the on-premises environments and vice-versa. They don't allow VPCs connected to the gateway to communicate with each other
+- We can have 10 VGW attachments per DX gateway
+- 1 DX connection can have up to 50 private VIFs, each of which support 1 DX gateway and 1 DX gateway supports 10 VGW association => we can connect up to 500 VPCs
+- DX gateway don't have a cost, we have cost for data transit only
+- Cross-account DX Gateways: multiple account can create association proposal for a DX gateway
