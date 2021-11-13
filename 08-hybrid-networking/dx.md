@@ -191,3 +191,56 @@
 - 1 DX connection can have up to 50 private VIFs, each of which support 1 DX gateway and 1 DX gateway supports 10 VGW association => we can connect up to 500 VPCs
 - DX gateway don't have a cost, we have cost for data transit only
 - Cross-account DX Gateways: multiple account can create association proposal for a DX gateway
+
+## Direct Connect Transit VIFs and TGW
+
+- A DX Gateway does not route between the associated VPCs to that gateway, it only routes from on-premises to AWS side or vice-versa
+- Transit Gateways are regionals, it is possible to peer TGWs allowing connections between regions
+- Transit Gateways are hub-and-spoke architecture, anything associated with a TGW is able to communicate with anything other associated to that TGW
+- This architecture also works within peered TGWs
+- DX-TGW Architecture:
+
+   ![DX-TGW Architecture](images/DXGateway4.png)
+
+- A DX supports up to 50 public and private VIFs and only 1 Transit VIF
+- We can connect up to 3 Transit Gateways connected to a Direct Connect connection
+- An individual DX gateway can be used with VPCs and private VIFs or with Transit Gateways and transit VIFs, **NOT BOTH** at the same time!
+- Consideration:
+    - DX gateway does not route between its attachments, this is why the peering connection between TGWs is required
+    - Each TGW can be attached up to 20 DX gateways
+    - Each TGW supports up 5000 attachments, up to 50 peering attachments
+- DX Gateway routing problems:
+    - DX gateway only allows communications from a private VIF to any associated virtual private gateways
+    - With a transit gateway we can solve this, if we connect the DX gateway to a transit gateway (works only in one region)
+
+## Direct Connect Resilience and HA
+
+- To improve resilience:
+    - Order 2 DX ports instead of one => 2 cross connects, 2 customer DX routes connecting to 2 on-premises routes
+    - Connect to 2 DX locations, have to customer routers and 2 on-premises routers in different buildings (geographically separated)
+- Not resilient DX architecture:
+
+    ![DX resilience NONE](images/DirectConnectResilience1.png)
+
+- Resilient DX architecture:
+
+    ![DX resilience OK](images/DirectConnectResilience2.png)
+
+- Improved resilient DX architecture:
+
+    ![DX resilience BETTER](images/DirectConnectResilience3.png)
+
+- Extreme resilient DX architecture:
+
+    ![DX resilience GREAT](images/DirectConnectResilience4.png)
+
+## Direct Connect Link Aggregation Groups (LAG)
+
+- LAG: allows to take multiple physical connections and configure them to act as one
+- From speed perspective: the speed increases linearly depending on the number of connections
+- LAG do provide resilience, although AWS does not market them as such. They do not provide any resilience regarding hardware failure or the failure of entire location
+- LAGs use an Active/Active architecture, maximum 4 connection can be part of the LAG
+- All connections must have the same speed and terminate at the same DX location
+- `MinimumLinks`: the LAG is active as long as the number of working connections is greater or equal to this value
+
+    ![DX LAG](images/DirectConnectLAG.png)
