@@ -280,3 +280,30 @@
 - A NAT GW can handle 55000 simultaneous connections to each unique destination. If we reach this point, we may run into port allocation error, this can be monitored with `ErrorPortAllocation' metric
 - NAT gateways inquire data transfer costs even when we are using them for accessing AWS services. Use gateway endpoints for accessing S3/DynamoDB, they inquire no additional cost
 - **We can't use security groups on the NAT gateways!**
+
+# Advanced VPC Routing
+
+- Subnets are associated with 1 route table only, which is either the main RT from the VPC or a customer RT
+- In case an explicitly associated RT is removed from the subnet, the main RT is associated again with it
+- RTs can be associated with an Internet Gateway or Virtual Private Gateway. This allows them to be used to control traffic flow entering into the VPC
+- IPv4 and IPv6 are handled separately within an RT
+- Routes send traffic based on destination to a target
+- A RT has a default limit of 50 static routes and 100 propagated routes if enabled
+- Whenever traffic arrives to a VPC interface, IGW or VGW, it is matched against in the routes in the relevant route table
+- All routes are evaluated, but the highest-priority matching one is used
+- Route Table evaluation priority:
+    - 1. Longest prefix wins
+    - 2. Static routes
+    - 3. Propagated routes
+    - 4. For propagated routes the priority list is the following
+        - 1. Routes learned via DX
+        - 2. VPN Static
+        - 3. VPN BGP
+        - 4. AS_PATH (distance with 2 different autonomous systems)
+
+##  Advanced VPC Routing - CIDR Overlap
+
+- It is not recommended to avoid having VPCs with overlapping IP ranges
+- If we really need to deal with this kind of networks, we can do the following:
+    - In case of VPC with multiple subnets peering with 2 VPCs with overlapping IP ranges, we can create different route tables for each subnet a let them peer to different VPCs
+    - Use a specific route (`/32` prefix) for certain services deployed in the overlapping VPCs
