@@ -18,3 +18,17 @@
 - Best choice for more than 5000 users and if we need trust relationship between AWS and on-premises directories
 - The domain controllers are HA by design and they replicate data between each other
 - AWS managed AD mode means we have a full directory within AWS running a native MS Active Directory
+
+## AD Connector
+
+- AD Connector provides a pair of directory endpoints running in AWS (ENIs in a VPC)
+- Supports directory-aware AWS products, such as Workspaces, Workdocs, Workmail, etc.
+- AD Connector redirects all the requests to an existing directory server running on-premises
+- No directory data is stored in AWS
+- AD Connector mode allows us to use AWS services which require a directory with an on-premises directory infrastructure
+- AD Connector supports architectures like proof of concepts running on AWS
+- There are 2 sizes of sizes for AD Connector: small and large. They do not impose any number for the user limit, but they control the amount of compute allocated to the connector instances
+- We can use multiple connectors to distribute the load
+- AD connector is placed into 2 subnets in a VPC, in different AZs
+- The connector requires 1 or more directory servers to be configured
+- It requires a working networking connection between AWS VPCs and the on-premises AD. The network connectivity is private, either Direct Connect or VPN
