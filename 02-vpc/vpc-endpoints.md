@@ -22,7 +22,7 @@
 
 - Gateway endpoints provide private access to supported services: **S3** and **DynamoDB**
 - They allow any resource in a private only VPC to access S3/DynamoDB
-- We crate a gateway endpoint per service per region and associate it to one or more subnets in a VPC
+- We create a gateway endpoint per service per region and associate it to one or more subnets in a VPC
 - We allocate a gateway endpoint to a subnet, a *Prefix List* is added to the route table for the subnet
 - Any traffic targeted to S3/DynamoDB will go through the gateway endpoint and not through the internet gateway
 - Gateway endpoints are highly available across all AZs in a region, they are not directly inside a VPC/subnet

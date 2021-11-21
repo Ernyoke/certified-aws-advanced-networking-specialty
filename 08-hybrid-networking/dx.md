@@ -173,6 +173,10 @@
 - Format of these is: `AS_NUMBER:OPERATOR_ASSIGNED_VALUE`. Example: `7224:9100`
 - BGP operators act on advertisements based on communities
 - BGP communities are used to provide some level of visibility of the location of route advertisement
+- We can use local preference BGP community tags to achieve load balancing and route preference for incoming traffic to your network. For each prefix that we advertise over a BGP session, we can apply a community tag to indicate the priority of the associated path for returning traffic:
+    - `7224:7100` - Low preference
+    - `7224:7200` - Medium preference
+    - `7224:7300` - High preference
 - Summary:
     - BGP communities control how far AWS advertise our routes
     - Allow BGP administrators to define rules for how to handle incoming prefix advertisements
