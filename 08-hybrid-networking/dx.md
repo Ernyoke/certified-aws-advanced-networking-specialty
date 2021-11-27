@@ -78,7 +78,7 @@
 - With BGP MD5 authentication we can ensure that only authenticated data is accepted at each side
 - VIFs can have 3 types: Public, Private and Transit
 - Public VIFs are used to connect to public AWS services or services from VPCs with public IP addressing
-- Private VIFs are sued to connect to private VPC resources
+- Private VIFs are used to connect to private VPC resources
 - Transit VIFs allow integration between DX and Transit Gateways
 - A single DX connection can have at total 50 Public/Private VIFs and 1 Transit VIF, for hosted connection we can have 1 VIF
  
@@ -177,6 +177,17 @@
     - `7224:7100` - Low preference
     - `7224:7200` - Medium preference
     - `7224:7300` - High preference
+- Control scope of how for to propagate our prefixes:
+    - `7224:9100` - Local AWS Region
+    - `7224:9200` - All AWS Regions for a continent
+        - North America–wide
+        - Asia Pacific
+        - Europe, the Middle East, and Africa
+    - `7224:9300` - Global (all public AWS Regions)
+- The communities `7224:1` – `7224:65535` are reserved by AWS Direct Connect. AWS Direct Connect applies the following BGP communities to its advertised routes:
+    - `7224:8100` - Routes that originate from the same AWS Region in which the AWS Direct Connect point of presence is associated
+    - `7224:8200` - Routes that originate from the same continent with which the AWS Direct Connect point of presence is associated
+    - No tag - Global (all public AWS Regions)
 - Summary:
     - BGP communities control how far AWS advertise our routes
     - Allow BGP administrators to define rules for how to handle incoming prefix advertisements
