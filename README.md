@@ -44,6 +44,7 @@
 9. Hybrid Services
     - [AWS Directory Service](09-hybrid-services/directory-services.md)
     - [Amazon Workspaces](09-hybrid-services/workspaces.md)
+    - [FSx](09-hybrid-services/fsx.md)
     
 ## Exam Description
 
