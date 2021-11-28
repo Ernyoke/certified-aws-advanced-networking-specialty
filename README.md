@@ -43,6 +43,7 @@
     - [DX - Direct Connect](08-hybrid-networking/dx.md)
 9. Hybrid Services
     - [AWS Directory Service](09-hybrid-services/directory-services.md)
+    - [Amazon Workspaces](09-hybrid-services/workspaces.md)
     
 ## Exam Description
 
