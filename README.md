@@ -45,6 +45,7 @@
     - [AWS Directory Service](09-hybrid-services/directory-services.md)
     - [Amazon Workspaces](09-hybrid-services/workspaces.md)
     - [FSx](09-hybrid-services/fsx.md)
+    - [Storage Gateway](09-hybrid-services/storage-gateway.md)
     
 ## Exam Description
 
