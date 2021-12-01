@@ -48,6 +48,9 @@
     - [Storage Gateway](09-hybrid-services/storage-gateway.md)
 10. Network Billing and Cost Management
     - [VPC Cost Management](10-cost-management/vpc-cost-management.md)
+    - [DX Cost Management](10-cost-management/dx-cost-management.md)
+11. Disaster Recovery
+    - [DR/BC Architecture](11-dr/dr.md)
     
 ## Exam Description
 
