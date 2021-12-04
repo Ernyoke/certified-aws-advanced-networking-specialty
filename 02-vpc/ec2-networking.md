@@ -46,7 +46,7 @@
 
 - Enhanced Networking Architecture (SR-IOV):
     - The network interface cards are virtual aware
-    - Each network card is creating virtual function (virtual network cards)
+    - Each network card is creating a virtual function (virtual network cards)
     - This functions offer a cut-down feature set enough to send/receive data
     - The management of the overall card is performed by the physical functions offering full functionality
     - Each physical device can offer up to 256 virtual functions

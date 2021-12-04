@@ -196,7 +196,8 @@
     3. Create some default routes
     4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
 - For IPv6 the 4. step does not apply
-- Static NAT:
+
+
 ## Egress-Only Internet Gateway
 
 - It is an internet gateway only allowing traffic from the inside of a VPC to the outside world
@@ -215,7 +216,7 @@
 - For IPv6 we can assign them directly to the VPC
 - IP addresses which are allocated to our resources are owned by AWS. They are not portable, we can't use them on-premises
 - Because AWS own these IP addresses, they are advertising them via BGP and they are authorized to do so
-- As an organization, we can control IPv4 and IPv6 ranges, meaning that we allocated these ranges via an regional internet registry (RIR)
+- As an organization, we can control IPv4 and IPv6 ranges, meaning that we allocated these ranges via a regional internet registry (RIR)
 - If we control these addresses, we can port them into AWS and we can authorize AWS to BGP advertise them from ASN 16509 and 14618
 - The internet will see these addresses as within AWS
 - BYOIP steps:
@@ -235,7 +236,7 @@
     5. and 6. Provision and Advertise
         - Create an authorization message for AWS and sign it with the private key
         - AWS uses RDAP to verify the control of the IP range
-- The most specific IPv4 address rage we can bring into AWS is a /24, and for IPv6 is /48 for publicly routable ranges and /56 for CIDRs that are not publicly advertised
+- The most specific IPv4 address range we can bring into AWS is a /24, and for IPv6 is /48 for publicly routable ranges and /56 for CIDRs that are not publicly advertised
 - BYOIP is one region at a time
 - We can import 5 IPv4 and IPv6 ranges per region per account
 - We can not share our IP address range with other accounts using AWS Resource Access Manager (RAM)
