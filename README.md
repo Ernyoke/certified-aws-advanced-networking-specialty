@@ -32,6 +32,8 @@
     - [`ip-ranges.json`](07-security/ip-ranges.md)
     - [AWS Shield and Web Application Firewall (WAF)](07-security/shield-and-waf.md)
     - [URL Filtering in a VPC](07-security/url-filtering.md)
+    - [AWS Config](07-security/config.md)
+    - [AWS Inspector](07-security/inspector.md)
 8. Hybrid Networking
     - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
     - [VGW - Virtual Private Gateway](08-hybrid-networking/vgw.md)
