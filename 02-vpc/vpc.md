@@ -24,8 +24,8 @@
     - Min /28 (16 IPs, some of the them cannot be used)
     - Max /16 (65536 IPs)
 - Optionally we can add secondary IPv4 blocks, max 5 (can be increased with a ticket to the support)
-- Optional single assigned IPv6 /56 CIDR block can be assigned to the VPC
-- IPv6 block can be picket by AWS or we can use addresses we own
+- Optional, a single assigned IPv6 /56 CIDR block can be assigned to the VPC
+- IPv6 block can be picket by AWS or we can use addresses we own. We cannot pick a CIDR range as with IPv4, we either let AWS pick a block or use addresses that we own
 - IPv6 addresses are all public by default, but resources still need to be given explicit access to be reachable
 
 ## DNS in VPC
@@ -34,12 +34,12 @@
 - This is provided nby Route 53
 - The DNS inside of a VPC is available at the Base IP + 2 address (example: 10.0.0.0 -> DNS ip is 10.0.0.2)
 - DNS options for VPCs:
-    - `enableDnsHostNames`: gives public instances a DNS name by default
+    - `enableDnsHostNames`: indicates if instances with public IP addresses in a VPC get public hostnames
     - `enableDnsSupport`: DNS resolution is enabled/disabled in the VPC
 
 ## VPC Subnets
 
-- A subnet is a subnetwork of a VPC, a port of a VPC which is inside of a specific availability zone
+- A subnet is a sub network of a VPC, a port of a VPC which is inside of a specific availability zone
 - It is created within one AZ and this can not be changed
 - Subnets provide AZ resiliency and high availability by putting resources in physically different locations
 - Relationship of subnet and AZ: 1 Subnet is in 1 AZ, 1 AZ can have 0 or more subnets
@@ -93,12 +93,12 @@
 
 - Every VPC is created with a main Route Table (RT), which is the default for every VPC
 - Custom route tables can be created for each subnet
-- Subnets can be associated with only one RT which can be the main one or custom
-- If we disassociate a custom RT form a subnet, the main RT will be attached to it
-- Main RT should not be changed, custom RT should be used for any routing changes
-- RT have routes, routes have an order, the most specific route wins
-- Edge Association: a RT tables is associated with network gateway
-- All RTs have at least one route: the local route which matches the VPC cidr range. These routes are un-editable
+- Subnets can be associated with only one route table which can be the main one or custom route table
+- If we disassociate a custom route table form a subnet, the main route table will be attached to it
+- The main route should not be changed (good practice), custom route tables should be used for any routing changes
+- Route tables have routes, routes have an order, the most specific route wins
+- Edge Association: a route table is associated with network gateway
+- All route tables have at least one route: the local route which matches the VPC cidr range. These routes are un-editable
 
 ## NACL - Network Access Control Lists
 
