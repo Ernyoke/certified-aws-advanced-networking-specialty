@@ -116,14 +116,16 @@
 - Last rule is an implicit deny in every NACL, if no rule before that applies, traffic will be denied
 - Default NACL: when a VPC is created, a default NACL is attached to it. The default NACL is allowing all traffic
 - Custom NACL: we can create them and attach them to subnets. The default NACL denies by default all traffic. Can be associated with many different subnet, however each subnet can have only one NACL associated to it at any time
+- NACL rules only impact data crossing the subnet boundary, they do not have effect on any communication within the subnet
 - NACL are not aware af any logical resources within a VPC, they are aware of IPs, CIDRs and protocols
+- Each subnet can have one NACL. This can be the default one or a custom NACL created by us. A single NACL can be associated with many different subnets
 
 ## SG - Security Groups
 
 - Security Groups are stateful firewalls, meaning they detect response traffic to a request and they automatically allow it
 - SGs do not have explicit **DENY** rules, they can not be used to block bad actors (use NACLs for this)
 - SGs support IP/CIDR rules and also allow to reference logical resources (including other SGs and event itself)
-- SGs are attached to Elastic Network Interfaces (ENI), when we attach a SG to an EC2, the SG will be attached to the primary ENI
+- SGs are attached to Elastic Network Interfaces (ENI). When we attach a SG to an EC2 instance, the SG will be attached to the primary ENI
 - SGs are capable to reference logical resources, ex. other security groups or self referencing
 
 ## VPC Flow Logs
@@ -135,27 +137,27 @@
     - Subnet level: monitors every network interface in the subnet
     - ENIs directly: monitor a specific interface only
 - Flow Logs are not realtime, we can't rely on Flow Logs to offer real time telemetry
-- Flow Logs can be configured to save data in different destinations. Currently S3 and CloudWatch Logs are supported
+- Flow Logs can be configured to save data in different destinations. Currently S3, CloudWatch Logs and Firehose are supported
 - We can use Athena if we want to query Flow Logs in an S3 bucket using a SQL-like query language
 - FLow Logs can be configured to capture metadata on only `ACCEPT`ed connections, only `REJECT`ed connections or capture ALL metadata
 - Flow Logs product capture Flog Log Records, which contain the following fields:
-    - Version
-    - Account ID
-    - Interface ID
-    - Srcaddr: source IP address
-    - Dstaddr: destination IP address
-    - Srcport: source port
-    - Dstort: destination port
-    - Protocol: 
+    - `version`
+    - `account-id`
+    - `interface-id`
+    - `srcaddr`: source IP address
+    - `dstaddr`: destination IP address
+    - `srcport`: source port
+    - `dstport`: destination port
+    - `protocol`: 
         - 1 - `ICMP`
         - 6 - `TCP`
         - 17 - `UDP`
-    - Packets
-    - Bytes
-    - Start
-    - End
-    - Action: `ACCEPT` or `REJECT`. Traffic is accepted or rejected
-    - Log-status
+    - `packets`
+    - `bytes`
+    - `start`
+    - `end`
+    - `action`: `ACCEPT` or `REJECT`. Traffic is accepted or rejected
+    - `log-status`
 - VPC Flow logs exclude the following traffic from logging:
     - Requests to `169.254.169.254`, `169.254.169.123`
     - DHCP traffic
@@ -196,7 +198,6 @@
     3. Create some default routes
     4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
 - For IPv6 the 4. step does not apply
-
 
 ## Egress-Only Internet Gateway
 
