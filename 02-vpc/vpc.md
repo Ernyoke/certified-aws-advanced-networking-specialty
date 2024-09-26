@@ -173,7 +173,7 @@
 - If we chose to allocate an IP range for a VPC, AWS will use a hex pair to uniquely allocate IP addresses to the subnets
 - Routing is handled separately for the IPv6 addresses, we will have IPv4 routes and IPv6 routes
 - Egress only internet gateway: similar to NAT gateway, allows outbound traffic denying inbound traffic in case of IPv6 addressing. NAT gateways or instances do not support IPv6!
-- We can have both internet gateway and egress only interne t gateway associated to the same subnet
+- We can have both internet gateway and egress only internet gateway associated to the same subnet
 ![IPv6 Architecture](IPv6EOIGW.png)
 - IPv6 can be set up while creating a VPC/subnet or we can migrate an existing VPC to IPv6
 - We can enable IPv6 on specific subnets only
@@ -198,6 +198,23 @@
     3. Create some default routes
     4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
 - For IPv6 the 4. step does not apply
+
+## VPC Traffic Mirroring
+
+- Usefully when we want to do content inspection, threat monitoring or troubleshooting traffic in a VPC network
+- Works by using **VXLAN**: the process of encapsulating Layer 2 connections over Layer 3 network
+- The encapsulated data is going over UDP over port 4789 (needs to be allowed in SG/NACL)
+- Architecture:
+![Traffic Mirroring](images/TrafficMirroring.png)
+- Consideration:
+    - Traffic mirroring uses **Sessions**: they remember how we configure traffic mirroring
+    - Sessions define:
+        - Which mirror source (an ENI) to use
+        - Which mirror target to use (an ENI as well or NLB, GWLB)
+    - Uses VXLAN encapsulation + GENEVE if GWLB is used
+    - Filters control what is mirrored
+    - Mirroring can be between the same of different VPCs, same or different accounts, but it does not to be in the same AWS region
+    - ENIs can be a source or target, but **NOT BOTH**
 
 ## Egress-Only Internet Gateway
 
