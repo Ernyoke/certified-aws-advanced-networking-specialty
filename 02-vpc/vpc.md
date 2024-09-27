@@ -180,6 +180,24 @@
 - We can point IPv6 traffic to internet gateway and egress only internet gateways as well
 - Not every service in AWS supports IPv6!
 
+## VPC Traffic Mirroring
+
+- Usefully when we want to do content inspection, threat monitoring or troubleshooting traffic in a VPC network
+- Works by using **VXLAN**: the process of encapsulating Layer 2 connections over Layer 3 network
+- The encapsulated data is going over UDP over port 4789 (needs to be allowed in SG/NACL)
+- Architecture:
+![Traffic Mirroring](images/TrafficMirroring.png)
+- Consideration:
+    - Traffic mirroring uses **Sessions**: they remember how we configure traffic mirroring
+    - Sessions define:
+        - Which mirror source (an ENI) to use
+        - Which mirror target to use (an ENI as well or NLB, GWLB)
+    - Uses VXLAN encapsulation + GENEVE if GWLB is used
+    - Filters control what is mirrored
+    - Mirroring can be between the same of different VPCs, same or different accounts, but it does not to be in the same AWS region
+    - ENIs can be a source or target, but **NOT BOTH**
+    - VPC Flow logs do not capture mirrored traffic
+
 ## IGW - Internet Gateway
 
 - IGWs can be created and attached to AWS VPCs, but they are not mandatory, essentially making the VPC private
@@ -198,23 +216,6 @@
     3. Create some default routes
     4. Make sure that public instances are launched with a public IP (or make sure the subnet attaches a a public IP automatically to the instances)
 - For IPv6 the 4. step does not apply
-
-## VPC Traffic Mirroring
-
-- Usefully when we want to do content inspection, threat monitoring or troubleshooting traffic in a VPC network
-- Works by using **VXLAN**: the process of encapsulating Layer 2 connections over Layer 3 network
-- The encapsulated data is going over UDP over port 4789 (needs to be allowed in SG/NACL)
-- Architecture:
-![Traffic Mirroring](images/TrafficMirroring.png)
-- Consideration:
-    - Traffic mirroring uses **Sessions**: they remember how we configure traffic mirroring
-    - Sessions define:
-        - Which mirror source (an ENI) to use
-        - Which mirror target to use (an ENI as well or NLB, GWLB)
-    - Uses VXLAN encapsulation + GENEVE if GWLB is used
-    - Filters control what is mirrored
-    - Mirroring can be between the same of different VPCs, same or different accounts, but it does not to be in the same AWS region
-    - ENIs can be a source or target, but **NOT BOTH**
 
 ## Egress-Only Internet Gateway
 
@@ -242,20 +243,22 @@
         - Create a an RSA (AES256) private key and a corresponding public key
         - Generate a x509 certificate signed with the private key
             - The only mandatory field is the common name
-        - Register with the Resource Public Key Infrastructure (RPKI) - requests made are signed with the private key 
-    3. Route Origin Authorization (ROA)
+        - Register with the Resource Public Key Infrastructure (RPKI) => this is how the RIR knows that requests are from us, requests made should be signed with the private key 
+    3. Create a Route Origin Authorization (ROA)
         - We have a Regional Internet Registry (RIR) allocated address
-        - Route Origin Authorization: we can think of as a document which contains the IP range together with who is authorized the advertise it
+        - Route Origin Authorization: we can think of as a document which contains the IP range together with who is authorized the advertise it (in this case this is AWS via BGP ASN 16509 and 14618)
         - Sign the ROA and provide it to the registry (RIR)
     4. RDAP Record
         - Core router: perform origin validation to make sure advertisements are valid
         - RDAP record is updated with the address space within the RIR, self-signed certificate is added to the RIR record
         - RDAP provides a protocol for anybody to be able to identify who is allowed to advertise an IP range
     5. and 6. Provision and Advertise
-        - Create an authorization message for AWS and sign it with the private key
-        - AWS uses RDAP to verify the control of the IP range
+        - Step 1: Create an authorization message for AWS and sign it with the private key
+        - Step 2: AWS requires a cryptographically signed authorization message which is presented to RIR. AWS uses RDAP to verify the control of the IP range
+        - Step 3: The registry (RIR) authenticates the signature against the certificate that we added in a previous step, and so the authorization details are checked against the ROA that we completed previously
+        - Step 4: Once verified, we can instruct AWS to advertise the IP address
 - The most specific IPv4 address range we can bring into AWS is a /24, and for IPv6 is /48 for publicly routable ranges and /56 for CIDRs that are not publicly advertised
-- BYOIP is one region at a time
+- BYOIP import happens one region at a time
 - We can import 5 IPv4 and IPv6 ranges per region per account
 - We can not share our IP address range with other accounts using AWS Resource Access Manager (RAM)
 
