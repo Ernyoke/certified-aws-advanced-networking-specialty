@@ -280,15 +280,16 @@
 - The speed we get from a NAT instance is based on size and type of EC2 instances
 - With EC2 instances for NAT we have to disable traffic source/destination checks, otherwise the packets will be dropped
 - With NAT instances we can have SG on the ENI and NACLs on the subnet
-- NAT instances can save costs by being able to be configured as bastion instances
+- NAT instances can save costs by setting the size of the EC2 instance or by being able to be configure them as bastion hosts/port forwards
 - NAT instances are self managed
-- NAT instances do not have built-in resilience! We can use scripts to implement high availability!
+- NAT instances do not have built-in resilience! We can use scripts to implement high availability => update route tables based on failures
+- We can use SGs and NACLs with NAT instances
 - For logging/monitoring we can use Flow Logs
-- NAT instances work across DX, VPN and Peering connections
+- NAT instances work across DX, VPN and Peering connections (not ideal)
 
 ## NAT Gateways
 
-- AWS recommended way of doing NAT process in a VPC
+- AWS recommended way of doing the network address translation process in a VPC
 - The NAT gateway itself does not have a public IP address, the communication with the public internet happens through the IGW
 - The NAT gateway communicates with the IGW while all the public traffic is routed from the private VPC to the NAT GW
 - NAT gateways needs to run from a public subnet because it requires to use an static IPv4 address to be able to do network address translation
