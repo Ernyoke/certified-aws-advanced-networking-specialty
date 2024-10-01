@@ -174,7 +174,9 @@
 - Routing is handled separately for the IPv6 addresses, we will have IPv4 routes and IPv6 routes
 - Egress only internet gateway: similar to NAT gateway, allows outbound traffic denying inbound traffic in case of IPv6 addressing. NAT gateways or instances do not support IPv6!
 - We can have both internet gateway and egress only internet gateway associated to the same subnet
+
 ![IPv6 Architecture](IPv6EOIGW.png)
+
 - IPv6 can be set up while creating a VPC/subnet or we can migrate an existing VPC to IPv6
 - We can enable IPv6 on specific subnets only
 - We can point IPv6 traffic to internet gateway and egress only internet gateways as well
@@ -186,7 +188,9 @@
 - Works by using **VXLAN**: the process of encapsulating Layer 2 connections over Layer 3 network
 - The encapsulated data is going over UDP over port 4789 (needs to be allowed in SG/NACL)
 - Architecture:
+
 ![Traffic Mirroring](images/TrafficMirroring.png)
+
 - Consideration:
     - Traffic mirroring uses **Sessions**: they remember how we configure traffic mirroring
     - Sessions define:
