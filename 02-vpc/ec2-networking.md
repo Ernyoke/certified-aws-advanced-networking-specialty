@@ -26,7 +26,7 @@
     - Use different networks for managing the same instance (management or isolated networks, public networks)
     - Use ENIs for software licensing (license based on MAC address)
     - Different network interfaces for security and network appliances
-    - Multiple network interfaces for multi-homed instances with workloads/roles on specific subnets
+    - Use multiple network interfaces for multi-homed instances with workloads/roles on specific subnets
     - Implement a low budget and simple HA solutions
 
 ## EC2 Enhanced Networking (SR-IOV)
@@ -55,16 +55,24 @@
 
     ![Enhanced Networking Architecture](images/EnhancedNetworking3.png)
 
+- To enable enhanced networking we can do the following:
+    - Use instances with Elastic Network Adapter (ENA):
+        - They supports speeds up tt 100 Gbps
+        - All instances built on AWS Nitro System use ENA
+    - Use Intel 82599 Virtual Function (VF) interface:
+        - Supports networks speeds up tp 10 Gbps
+        - Following instance types use Intel 82599 Virtual Functions: C3, C4, D2, I2, M4 (excluding m4.16xlarge), and R3
+
 ## Network Performance within AWS
 
 - We should use enhanced networking for anything beyond base level performance requirements
 - If we have 2 instances communicating over the network, the best performance we can achieve is the lowest common denominator (we cannot have better speeds than the maximum capability of the slower instance)
 - Factors which can influence an instance's network speed is the size and type of the instance. Larger sizes generally offer better network performance
-- We can have different types of ENIs: older ENI up to 10GBps, newer up to 100Gbps
+- We can have different types of ENIs: older ENI up to 10GBps, newer ENA up to 100Gbps
 - Other much performance caps:
     - Instance in the same region: performance is dictated by the lowest performing instance
     - Instances in different regions can have a max aggregate performance bandwidth quota of 5Gbps
-    - 5 Tuple (SRC IP, DST IP, SRC Port, DST Port & Protocol): Single Flow between A and B limit is 5Gbps MAX. Ways around this: Multi-path TCP (MPTCP), other protocols which support multiple streams
+    - Single Flow or 5 Tuple: Single Flow is defined as the communication between source and destination IP using the same port and same protocol. Single Flow limit is 5Gbps MAX in case we are not using placement groups. Ways around this: Multi-path TCP (MPTCP), other protocols which support multi-flow transfers
 
     ![Network Performance within AWS](images/EnhancedNetworking4.png)
 
@@ -75,7 +83,7 @@
 - Can be added when the instance is launched or when the instance is in a shutdown state
 - EFI support **OS Bypass**: provides lower and more consistent latency and higher throughput than the TCP transport; it enhances the performance of inter-instance communication for scaling HPC and ML applications
 - EFA removes the OSI stack specification from the communication which in this case gets in the way of performance
-- Any HPC or ML application which uses MPI or NCCL are candidates for using an EFA attached to the EC2 instance
+- Any HPC or ML application which uses **MPI** or **NCCL** are candidates for using an EFA attached to the EC2 instance
 - EFAs provide the traditional networking features are ENIs, but they also provide these OS bypass capabilities
 - EFA compared to traditional 7 layer stack:
 
@@ -111,9 +119,10 @@
 - Cluster placement groups should be used for highest performance. They offer no HA and very little resilience
 - Considerations for cluster placement groups:
     - We can not span AZs, the AZ is locked when the first instance is launching
-    - We can span VPC peers, but this will impact performance negatively
+    - We can span VPC peers, but this will impact performance in a negative way
     - Cluster placement groups are not supported for every instance type
     - *Recommended*: use the same type of instances and launch them at the same time
+    - *Recommended*: launch instances at the same tme
     - Cluster placement groups offer 10 Gbps for single stream performance
 
 ### Spread Placement Groups
