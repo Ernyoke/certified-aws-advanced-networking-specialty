@@ -67,12 +67,12 @@
         - Rule actions: `forward`, `redirect`, `fixed-response`, `authenticate-oidc` and `authenticate-cognito`
     - The connection from the ALB and the instance is a separate connection
 - **Network Load Balancer (NLB)**:
-    - NLBs are layer 4 load balancers, meaning they support TPC, TLS, UDP, TCP_UDP connections
-    - They have no understanding of HTTP or HTTPS => no concept of network stickiness
-    - They are really fast, can handle millions of request per second having 25% latency of ALBs
+    - NLBs are layer 4 load balancers, meaning they support TCP, TLS, UDP, TCP_UDP connections
+    - They have no understanding of HTTP or HTTPS => no concept of headers, cookies or session stickiness
+    - They are really fast, they can handle millions of request per second having 25% latency of ALBs
     - Recommended for SMTP, SSH, game servers, financial apps (not HTTP(S))
-    - Health checks can only check ICMP or TCP handshake
-    - They can be allocated with static IP addresses
+    - Health checks can only check ICMP/TCP handshake
+    - They can be allocated with static IP addresses, useful for whitelisting
     - They can forward TCP straight through the instances => unbroken encryption
     - NLBs can be used for PrivateLink
 
