@@ -19,8 +19,8 @@
 3. Networking Automation
     - [CloudFormation](03-networking-automation/cloudformation.md)
 4. Elastic Load Balancing - Deep Dive
-    - [ELB - Elastic Load Balancer](04-elb/elb.md)
-    - [GWLB - Gateway Load Balancers](04-elb/gwlb.md)
+    - [ELB - Elastic Load Balancer](04-lb/elb.md)
+    - [GWLB - Gateway Load Balancers](04-lb/gwlb.md)
 5. Route 53 - Deep Dive
     - [Route 53](05-r53/r53.md)
 6. Network Content Delivery (CDN) in AWS

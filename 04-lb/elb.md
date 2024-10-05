@@ -23,14 +23,27 @@
     - When we pick a subnet, AWS places one or more load balancer nodes in that subnet
     - When an LB is created, it has a DNS A record. The DNS name resolves all the nodes located in multiple AZs. The nodes are HA: if the node fails, a different one is created. If the load is to high, multiple nodes are created
     - We have to decide on creation if the LB is internal or internet facing (have public IP addresses or not)
-- Listener configuration: what the LB is listening to (what protocols, ports etc.)
+- Listener configuration: controls what the LB is listening to (what protocols, ports will be accepted at the listener side of the load balancer)
 - An internat facing load balancer can connect to both public and private instances
 - Minimum subnet size for a LB is /28 - 8+ fee addresses per subnet (AWS suggests a minimum of /27)
 
 ## Cross-Zone Load Balancing
 
 - Initially each LB node could distribute traffic to instances in the same AZ
-- Cross-Zone Load Balancing: allows any LB node to distribute connections equally across all registered instances in all AZs
+- Cross-Zone Load Balancing allows any LB node to distribute connections equally across all registered instances in all AZs
+- For ALB cross-zone load balancing is enabled by default
+
+## Other Architectural Considerations
+
+- When an ELB is provisioned, we see it as one device which runs in 2 ore more AZs
+- What actually is created is one ELB node per subnet in each AZ that the LB is configured in
+- We are also creating a DNS record for that LB which spreads the incoming requests through all the active nodes for the LB
+- Nodes in one subnet per AZ can scale
+- Load balancers comes in 2 types:
+    - Internet facing: means the nodes have a public IPv4 address
+    - Internal: nodes have only private IP addresses
+- An internet facing load balancer can communicate to private instances within a VPC. These instances don't need public IP addresses
+- A load balancers requires 8 or more free IP addresses per subnet, and a /27 subnet to allow scaling
 
 ## Application and Network Load Balancers
 
@@ -41,7 +54,7 @@
 - **Application Load Balancer (ALB)**:
     - ALB is a true layer 7 load balancer, configured to listen either HTTP or HTTPS protocols
     - ALB can not understand any other layer 7 protocols (such as SMTP, SSH, etc.)
-    - ALB requires HTTP and HTTPS listeners
+    - ALB requires HTTP and HTTPS listeners, it cannot be configured with TPC/UDP/TLS listeners
     - It can understand layer 7 content, such as cookies, custom headers, user location, app behavior, etc.
     - Any incoming connection (HTTP, HTTPS) is always terminated on the ALB - no unbroken SSL
     - All ALBs using HTTPS must have SSL certificates installed
@@ -50,9 +63,9 @@
     - Application Load Balancer Rules:
         - Rules direct connection which arrive at a listener
         - Rules are processed in a priority order, default rule being a catch all
-        - Rule conditions: host-header, http-header, http-request-method, path-pattern, query-string and source-ip
-        - Rule actions: forward, redirect, fixed-response, authenticate-oidc and authenticate-cognito
-    - The connection from the LB and the instance is a separate connection
+        - Rule conditions: `host-header`, `http-header`, `http-request-method`, `path-pattern`, `query-string` and `source-ip`
+        - Rule actions: `forward`, `redirect`, `fixed-response`, `authenticate-oidc` and `authenticate-cognito`
+    - The connection from the ALB and the instance is a separate connection
 - **Network Load Balancer (NLB)**:
     - NLBs are layer 4 load balancers, meaning they support TPC, TLS, UDP, TCP_UDP connections
     - They have no understanding of HTTP or HTTPS => no concept of network stickiness
