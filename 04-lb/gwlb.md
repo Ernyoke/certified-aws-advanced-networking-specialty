@@ -6,7 +6,7 @@
     - GWLB endpoints: run from a VPC from which the traffic we want to monitor originates or where the traffic is destined to
         - They are similar to interface endpoints
     - GWLB itself, balancing packets across multiple backend appliances
-- GWLB use a protocol called GENEVE, a tunneling protocol. A tunnel is created between the GWLB and backend security appliances, meaning that packets are unaltered, they have the same source/destination IP addresses and same contents when they sent
+- GWLB use a protocol called `GENEVE`, a tunneling protocol. A tunnel is created between the GWLB and backend security appliances, meaning that packets are unaltered, they have the same source/destination IP addresses and same contents when they sent
 
 ![GWLB](images/GWLB2.png)
 
