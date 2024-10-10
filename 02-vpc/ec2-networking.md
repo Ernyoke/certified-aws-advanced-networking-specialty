@@ -76,9 +76,17 @@
 
     ![Network Performance within AWS](images/EnhancedNetworking4.png)
 
+## Intel Data Plane Development Kit (DPDK)
+
+- It is a set of libraries and drivers for fast packet processing
+- While enhanced networking and SR-IOV reduce the overhead of packet processing between the instance and the hypervisor, DPDK reduces the overhead of packet processing inside the OS
+- Provides lower latency due to Kernel bypass
+- Offers more control, over packet processing
+- Requires lower CPU overhead
+
 ## EFA - Elastic Fabric Adapter
 
-- Is a type of ENI for EC2
+- Is a special type of ENI for EC2
 - We can have 1 of this type per instance
 - Can be added when the instance is launched or when the instance is in a shutdown state
 - EFI support **OS Bypass**: provides lower and more consistent latency and higher throughput than the TCP transport; it enhances the performance of inter-instance communication for scaling HPC and ML applications
@@ -95,6 +103,7 @@
 
 - Limitations of OS Bypass:
     - It is single subnet only
+    - Can be used with Linux-based instances only
     - EFAs can be used for cross subnet/AZ works but this will be normal IP traffic
     - OS Bypass traffic cannot be routed
     - Security Group attached to the instances needs an ALLOW ALL, self-referential rule for INBOUND and OUTBOUND traffic
