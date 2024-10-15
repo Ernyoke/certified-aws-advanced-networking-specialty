@@ -100,7 +100,7 @@
 
     ![SSL/SNI architecture](images/CloudFrontSSLSNI.png)
 
-- For S3 origin, we don't need to apply certificates for the origin protocol. For ALB/EC2/on-prem we can have public certificates which needs to match the DNS name of the origin
+- For S3 origin, we don't need to apply certificates for the origin protocol. For ALB/EC2/on-prem we can have public certificates which needs to match the DNS name of the origin. **Self-signed certificate is not supported!**
 
 ## Origin Types and Architecture
 
@@ -141,7 +141,7 @@
 
 ## CloudFront Security
 
-### OAI and Custom Origins
+### OAC/OAI and Custom Origins
 
 - S3 origins:
     - OAI - Origin Access Identity: is a type of identity, it can be associated with CloudFront distributions
@@ -149,21 +149,18 @@
     - Common pattern is to lock the S3 bucket to be only accessible to CloudFront
     - The edge location gains the attached OAI identity, meaning they will be able to access the bucket
     - Direct access from the end-user to the bucket content can be disabled
+    - An OAI can be used on many CloudFront distributions and many buckets at the same time. Recommended to use one OAI for one bucket and for one distribution
+    - OAI is no longer recommended for production usage, we should use OAC
+    - Origin Access Control (OAC):
+        - Newer feature whose purpose is the same as OAI
+        - Offer some more granular features, such as:
+            - Comprehensive HTTP methods support – OAC supports GET, PUT, POST, PATCH, DELETE, OPTIONS, and HEAD
+            - OAC supports downloading and uploading S3 objects encrypted with SSE-KMS
+            - OAC supports accessing S3 in all AWS regions, including existing regions and all future regions
 - Custom origins:
     - We can not use OAI to control access
     - We can utilize custom headers, which will be protected by the HTTPS protocol. CloudFront will be configured to send this custom header
     - Other way to handle CloudFront security from custom origins is to determine the IP ranges from which the request is coming from. CloudFront IP ranges are publicly available
-
-### Private Distributions
-
-- CloudFront can run in 2 different modes:
-    - Public: can be accessed by any viewer
-    - Private: requests to CloudFront needs to be made with a signed url or cookie
-- If the CloudFront distribution has only 1 behavior the whole distribution is considered to be either public or private
-- In case of multiple behaviors: each behavior can be either public or private
-- In order to enable private distribution of content, we need to create a **CloudFront Key** by an Account Root User. That account is added as a **Trusted Signer**
-- Signed URLs provide access to one particular object. They are also used for legacy RTMP distributions which can not use cookies
-- Signed cookies can provide access to groups of objects or all files of a particular type
 
 ### CloudFront Geo Restriction
 
@@ -178,6 +175,25 @@
         - Completely customizable, can be used to filter on lots of other attributes, example: username, user attributes, etc.
         - Requires an application server in front of CloudFront, which controls weather the customer has access to the content or not
         - The application generates a signed url/cookie which is returned to the browser. This can be sent to CloudFront for authorization
+
+### Private Distributions
+
+- CloudFront can run in 2 different modes:
+    - Public: can be accessed by any viewer
+    - Private: requests to CloudFront needs to be made with a signed url or cookie
+- If the CloudFront distribution has only 1 behavior the whole distribution is considered to be either public or private
+- In case of multiple behaviors: each behavior can be either public or private
+- To enable a private distribution:
+    - First we require a Signer. It is an entity which can create signed urls or signed cookies
+    - Once a signer is added ot a behavior, that behavior is private
+    - OLD way: In order to enable private distribution of content, we need to create a **CloudFront Key** by an Account Root User. That account is added as a **Trusted Signer**
+    - NEW way: Create Trusted Key Groups and assign them to signers
+    - Preferred way is to use Trusted Key Groups, because of the following reasons:
+        - We don't need to use the root user to manage keys
+        - We manage the key groups throw CloudFront console/API. This gives us more flexibility
+- Signed URLs vs Signed Cookies:
+    - Signed URLs provide access to one particular object. Historically RTMP distributions could not use signed cookies, this is not valid anymore!
+    - Signed cookies can provide access to groups of objects or all files of a particular type
 
 ### Field-Level Encryption
 
