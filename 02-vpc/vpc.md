@@ -199,8 +199,11 @@
     - Uses VXLAN encapsulation + GENEVE if GWLB is used
     - Filters control what is mirrored
     - Mirroring can be between the same of different VPCs, same or different accounts, but it does not to be in the same AWS region
+    - Mirror target could be another ENI or Network Load Balancer (NLB). In case of an NLB, UDP port 4789 should be open
     - ENIs can be a source or target, but **NOT BOTH**
     - VPC Flow logs do not capture mirrored traffic
+    - The traffic source and the traffic mirror target (monitoring appliance) can be in the same VPC or they can be in a different VPC connected via VPC peering or Transit Gateway (in case we connect another VPC, this VPC should be in the same region!)
+    - Source and destination can be in different AWS accounts
 
 ## IGW - Internet Gateway
 
