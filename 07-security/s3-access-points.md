@@ -7,3 +7,5 @@
 - Each access point has its own endpoint address
 - We can create access point using the console or the CLI using `aws s3control create-access-point --name < name > --account-id < account-id > --bucket < bucket-name >`
 - Any permission defined on the access point needs to be defined on the bucket policy as well
+- Access point policies can restrict identities to certain prefix(s), tags or actions based on need
+- Access points can be configured for access via VPC, in which case requires a VPC endpoint. Access via this route can be enforced by the endpoint policy

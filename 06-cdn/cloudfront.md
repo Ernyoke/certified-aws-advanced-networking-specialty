@@ -214,8 +214,8 @@
     - Functions don't have access to any resources in a VPC, they run in AWS public space
     - Lambda Layers are not supported
 - They have different size and duration limits compared to classic Lambda functions:
-    - Viewer side: 128MB/5seconds
-    - Origin side: same as classic Lambda/30seconds
+    - Viewer side: 128MB memory / up to 5 seconds function duration
+    - Origin side: memory same as classic Lambda/ up to 30 seconds function duration
 - Lambda@Edge use cases:
     - A/B testing - viewer request function
     - Migration between S3 origins - origin request function
