@@ -168,3 +168,10 @@
     - Authentication
 - Metadata is also used to grant access to user data
 - The metadata service in not encrypted and it not requires authentication
+
+## Network I/O Credits
+
+- Instance families such as R4 and C5 use a network I/O credit mechanism
+- Most application do not consistently need a high network performance
+- These instances perform well above baseline n/w performance during peak requirement
+- We should make sure that we consider the accumulated n/w credits before doing performance benchmark for instances supporting network I/O credits mechanism
