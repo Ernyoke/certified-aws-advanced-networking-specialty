@@ -32,6 +32,7 @@
     - [`ip-ranges.json`](07-security/ip-ranges.md)
     - [Application Layer (L7) Firewalls](07-security/application-layer-firewalls.md)
     - [AWS Shield](07-security/shield.md)
+    - [AWS Network Firewall](07-security/network-firewall.md)
     - [URL Filtering in a VPC](07-security/url-filtering.md)
     - [AWS Config](07-security/config.md)
     - [CloudHSM](07-security/cloudhsm.md)
