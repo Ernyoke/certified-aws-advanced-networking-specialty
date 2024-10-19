@@ -164,6 +164,24 @@
     - Requests to Amazon DNS server
     - Requests to Amazon Windows License server
 
+## VPC Network Analysis
+
+- **Reachability Analyzer**:
+    - We provide the source and destination of our traffic
+    - Reachability Analyzer will tell us if our traffic can reach the destination from the source
+    - Produces hop-by-hop details of the virtual network paths
+    - Points out the blocking components when traffic is not reachable
+    - Does not send real packets. It uses network configurations to find out if network is reachable
+    - Limitations:
+        - The source and the destination of the traffic must be in the same region
+        - The source and the destination must be in the same VPC or VPCs connected through VPC peering ot Transit Gateway
+        - Currently supports only IPv4 traffic
+    - There is a charge for each analysis we do
+- **Network Access Analyzer**:
+    - Similar to  Reachability Analyzer
+    - With Network Access Analyzer we want to detect which paths exist from source to destination for our network traffic
+    - With try to analyze if the paths correspond to our security policies
+
 ## IPv6 Capability in VPCs
 
 - IPv6 addresses are all publicly routable
