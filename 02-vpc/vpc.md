@@ -181,6 +181,12 @@
     - Similar to  Reachability Analyzer
     - With Network Access Analyzer we want to detect which paths exist from source to destination for our network traffic
     - With try to analyze if the paths correspond to our security policies
+    - It can identify un-intended network access to the AWS resources:
+        - Isolated network segments: no communication between production and development VPCs
+        - Internet accessibility: only required resources can be reached over the internet
+        - Trusted network paths: NAT gateway or firewall in the path
+        - Trusted network access: accessible only from specific resource, IP range, port, protocol, etc.
+
 
 ## IPv6 Capability in VPCs
 
