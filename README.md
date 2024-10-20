@@ -38,6 +38,7 @@
     - [CloudHSM](07-security/cloudhsm.md)
     - [Amazon Macie](07-security/macie.md)
     - [Amazon Inspector](07-security/inspector.md)
+    - [AWS Control Tower](07-security/control-tower.md)
 8. Hybrid Networking
     - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
     - [VGW - Virtual Private Gateway](08-hybrid-networking/vgw.md)
