@@ -1,12 +1,12 @@
-# AWS Inspector
+# Amazon Inspector
 
 - Is a product designed to check EC2 instances and the operating systems running on those instances for any vulnerabilities or deviations against best practice
 - Inspector can be run for a certain period of time (15 min, 1 hour, 1 day, etc.) to identify any unusual traffic and configurations which can put instances to risk
 - Provides a report of findings ordered by severity
 - Inspector can work with 2 main type of assessment per instances:
-    - Network Assessment: can be conducted agentless
-    - Network and Host Assessment: requires an agent to be installed
-- Rules packages: determine what is checked on an instance
+    - **Network Assessment**: can be conducted agentless, but adding a agent provides additional richer information
+    - **Network and Host Assessment**: requires an agent to be installed. Looks at OS level vulnerabilities
+- **Rules packages**: determine what is checked on an instance
 - Examples of rule packages:
     - **Network Reachability**: 
         - Can be done with no agent or with an agent providing OS visibility
@@ -15,9 +15,9 @@
             - `RecognizedPortWithListener`
             - `RecognizedPortNoListener`
             - `RecognizedPortNoAgent`
-            - `UnrecognizedPortWithListener`
-    - Host Assessment:
+            - `UnrecognizedPortWithListener`: Macie can identify any unrecognized ports exposed to listeners
+    - **Host Assessment**:
         - Agent is required
-        - Checks for Common vulnerabilities and exposures (CVE)
-        - Center for Internet Security (CIS) Benchmarks
-        - Security best practices for Amazon Inspector
+        - Checks for Common vulnerabilities and exposures (**CVE**)
+        - Center for Internet Security (**CIS**) Benchmarks
+        - **Security best practices** for Amazon Inspector

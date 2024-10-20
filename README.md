@@ -37,7 +37,7 @@
     - [AWS Config](07-security/config.md)
     - [CloudHSM](07-security/cloudhsm.md)
     - [Amazon Macie](07-security/macie.md)
-    - [AWS Inspector](07-security/inspector.md)
+    - [Amazon Inspector](07-security/inspector.md)
 8. Hybrid Networking
     - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
     - [VGW - Virtual Private Gateway](08-hybrid-networking/vgw.md)
