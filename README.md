@@ -32,19 +32,11 @@
     - [`ip-ranges.json`](07-security/ip-ranges.md)
     - [Application Layer (L7) Firewalls](07-security/application-layer-firewalls.md)
     - [AWS Shield](07-security/shield.md)
-<<<<<<< HEAD
-=======
-    - [AWS Network Firewall](07-security/network-firewall.md)
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
     - [URL Filtering in a VPC](07-security/url-filtering.md)
     - [AWS Config](07-security/config.md)
     - [CloudHSM](07-security/cloudhsm.md)
     - [Amazon Macie](07-security/macie.md)
-<<<<<<< HEAD
     - [AWS Inspector](07-security/inspector.md)
-=======
-    - [Amazon Inspector](07-security/inspector.md)
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
     - [AWS Control Tower](07-security/control-tower.md)
 8. Hybrid Networking
     - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
