@@ -7,7 +7,6 @@
 
 ## Control Tower Features
 
-<<<<<<< HEAD
 - **Landing Zones**: it is the multi-account environment part of Control Tower
     - Provides via other AWS services:
         - SSO/ID Federation with IAM Identity Center
@@ -21,21 +20,6 @@
 - Inside the Foundational OU Control Tower creates two accounts:
     - *Audit Account*: for users who needs access to audit information provided by Control Tower
     - *Log Archive Account*: for users who need access to all log information to all enrolled accounts within the Landing Zones
-=======
-- **Landing Zones**: it is the multi-account environment
-    - Provides via other AWS services:
-        - SSO/ID Federation
-        - Centralized logging and auditing
-- **Guard Rails**: used to detect/mandate rules and standards across all accounts
-- **Account Factory**: automates and standardizes new account creation
-- **Dashboard**: single page oversight of the entire environment
-- When Control Tower is set up, it creates to OUs:
-    - Foundational OU (security)
-    - Custom OU (sandbox)
-- Inside the Foundational OU Control Tower creates two accounts:
-    - Audit Account: for users who needs access to audit information provided by Control Tower
-    - Log Archive Account: for users who need access to all log information to all enrolled accounts within the Landing Zones
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
 - Within the Custom OU Account Factory will provision AWS accounts in an automated way
 - For these new accounts we have bases templates for configurations:
     - Account Baseline template
@@ -46,11 +30,7 @@
 ## Landing Zones
 
 - It is a feature designed that anyone should be able to implement a *well architected* multi-account environment
-<<<<<<< HEAD
 - It has the concept of **Home Region**: the region where we initially deploy the product
-=======
-- Home Region: the region where we initially deploy the product
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
 - A Landing Zone creates the Security and Sandbox OUs, we can create other OUs and accounts as well
 - Landing Zones utilizes the IAM Identity Center for multiple-accounts and ID Federation
 - A Landing Zone provides monitoring and notifications via CloudWatch and SNS
@@ -60,7 +40,6 @@
 
 - They are rules for multi-account governance
 - There are 3 different types of rules:
-<<<<<<< HEAD
     - **Mandatory**
     - **Strongly Recommended**
     - **Elective** (optional)
@@ -70,17 +49,6 @@
         - They are enforced or not enabled
         - Example: allow or deny regions; disallow bucket policy changes in the Org
     - **Detective**: compliance check
-=======
-    - Mandatory
-    - Strongly Recommended
-    - Elective
-- Guardrails function in two different ways:
-    - Preventive: stop us from doing things
-        - They are implement using SCPs
-        - They are enforced or not enabled
-        - Example: allow or deny regions; disallow bucket policy changes in the Org
-    - Detective: compliance check
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
         - Uses AWS Config Rules to detect compliance violations
         - These types of Guardrails are either *clear*, *in violation* or *not enabled*
         - Example: check if CloudTrail is enabled; check if EC2 instances have public IPv4 attached
@@ -92,8 +60,4 @@
 - Guardrails are automatically applied to the provisioned accounts
 - Account admin can be given to a named user who provisions the account or to another user
 - Accounts can be configured with standard account and network configurations
-<<<<<<< HEAD
 - Can be fully integrated with a businesses' SDLC
-=======
-- Can be fully integrated with a businessess SDLC
->>>>>>> cc49a39fe1ac9ece62f33ecb24a655bd5edfafbe
