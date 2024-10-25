@@ -11,14 +11,21 @@
         - Physical on-premises router which the VPN connects to
     - **VPN Connection** itself: the connection linking the VGW from the AWS to the CGW
 - Static vs Dynamic VPN:
-    - **Dynamic VPN** uses BGP protocol, if customer router does not support BGP, we can not use dynamic VPNs
-    - **Static VPN** uses static network configuration: static routes are added to the route tables AWS side, static networks has to be identified on the VPN connection on-premise side. It is simple, it just uses IPSec, works anywhere, having limitation on terms of HA
-    - Dynamic VPN uses BGP: allows routing on the fly, allows multiple links to be used at once between the same locations. Allows using HA available architectures.
-        - Route propagation: if enabled means that routes are added ro the Route Table automatically
+    - **Static VPN**:
+        - Uses static network configuration: static routes are added to the route tables AWS side, static networks has to be identified on the VPN connection on-premise side
+        - It is simple, it just uses IPSec, works anywhere, having limitation on terms of HA
+        - No load balancing and multi connection failover
+    - **Dynamic VPN**:
+        - Uses BGP protocol, if customer router does not support BGP, we can not use dynamic VPNs
+        - BGP allows routing on the fly, allows multiple links to be used at once between the same locations. Allows using HA available architectures
+        - With dynamic VPN we still can add static routes to the route tables and/or we can enable *route propagation*
+        - *Route propagation*: if enabled means that routes are added ro the Route Table automatically
 - Considerations for VPN:
-    - Speed Limitation for VPN: *1.25 Gbps*, AWS limitation
+    - Speed Limitation for VPN: *1.25 Gbps*, AWS limitation + there is an encryption overhead
+    - There is a speed limitation for all the VPN connection connecting to the same VGW. A VGW can allow at most 1.25 Gbps
     - Latency considerations: inconsistent, traffic goes through the public internet
     - Cost: hourly cost for outgoing traffic
+    - Speed of setup: can be setup in hours, VPN is a the quickest to be setup compared to other private connection technologies
     - VPN can be used for Direct Connect backup or they can be used over the Direct Connect for adding a layer of encryption
 
 ## Accelerated Site-to-Site VPN
