@@ -28,6 +28,23 @@
     - Speed of setup: can be setup in hours, VPN is a the quickest to be setup compared to other private connection technologies
     - VPN can be used for Direct Connect backup or they can be used over the Direct Connect for adding a layer of encryption
 
+## Dead Peer Detection (DPD)
+
+- It is a mechanism through which we can detect liveliness of IPSec VPN connection
+- DPD is optional setting
+- VPN peers can decide during the IKE Phase 1 if they want to use DPD
+- If DPD is enabled AWS continuously (every 10 seconds) sends DPD (R-U-THERE) messages to customer gateway (CGW) and waits for the R-U-THERE-ACK
+- If there is no response for 3 consecutive requests, then the DPD times out
+- By default when DPD occurs the gateways will delete the security associations. During this process the alternate IPSec tunnel can be used (if there is one)
+- Default DPD timeout value is 30 sec which can be set higher
+- DPD uses UDP port 500 or UDP port 4500 to send DPD messages
+- When DPD timeout occurs, the following actions can happen:
+    - *Clear* (default action): end the IPSec IKE session, stop the tunnel and clear the routes
+    - *Restart*: AWS restarts the IKE phase 1
+    - *None*: take no action
+- Customer router must support DPD when using dynamic routing with BGP
+- VPN tunnel can still be terminated due to inactivity or idle connection. We can set up appropriate idle timeout or setup hosts which sends ICMP ping requests to each other every 5-10 seconds
+
 ## Accelerated Site-to-Site VPN
 
 - Performance enhancement for AWS Site-to-Site VPN that uses the AWS global network, the same network used for Global Accelerator and CloudFront
