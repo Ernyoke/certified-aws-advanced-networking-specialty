@@ -71,3 +71,4 @@
 - This route table is pushed to any client which connects to the Client VPN Endpoint
 - The default behavior is the Client VPN route table replaces any local routes on the client, meaning the client devices can not access anything locally on their local network without having communication going through the Client VPN Endpoint
 - We can use split tunnel VPN, meaning that any routes from the Client VPN Endpoint are added to local client route tables. This solves the problem with the default behavior
+- Split tunnel is **NOT** enabled by default, it must be enabled by us, otherwise all the data will go through the tunnel
