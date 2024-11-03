@@ -4,7 +4,7 @@
 
 - It is a physical connection into an AWS region
 - It can be 1, 10 or 100 Gbps connection
-- The connection is between the business premisses => DX Location => AWS Region
+- The connection is between the *business premisses* => *DX Location* => *AWS Region*
 - When we order a DX connection, actually we order a port allocation at a DX location. It does not provide a connection of any kind by itself, it is just a physical port. It is up to us to connect to this directly or arrange a connection to be extended via a third party comms provider
 - The cost for DX includes a hourly cost + cost for the outbound data transfer. Inbound data transfer is free of charge
 - To be taken in consideration:
@@ -12,43 +12,46 @@
     - No builtin resilience by default
     - Provides low and consistent latency + high speeds
     - DX can be used to access AWS Private Services (running in VPCs) and AWS Public Services
+- DX architecture:
+
+    ![DX architecture](images/DirectConnectArchitecture1.png)
 
 ## Physical Connection Architecture
 
 - A direct connect is a physical port allocated at DX location, this physical port provides either 1, 10 or 100 Gbps connection speed
 - Port allocated at the DX location requires the use of single-mode fibre, we can't connect using copper connection
 - Physical layer connection standards:
-    - 1Gbps connection: 1000BASE-LX (1310nm) Transceiver
-    - 10Gbps connection: 10GBASE-LR (1310nm) Transceiver
-    - 100Gbps connection: 100GBASE-LR4 Transceiver
+    - 1Gbps connection: **1000BASE-LX** (1310nm) Transceiver
+    - 10Gbps connection: **10GBASE-LR** (1310nm) Transceiver
+    - 100Gbps connection: **100GBASE-LR4** Transceiver
 - In terms of the configuration for the DX ports:
     - We have to make sure that Auto-Negotiation is disabled
     - We configure the port speed
     - Full-duplex has to be manually set on the network connection
-- The router on the DX location should support the BGP protocol and BGP MD5 Authentication
+- The router on the DX location should support the *BGP* protocol and *BGP MD5* based Authentication
 - Optional configurations:
     - MACsec
     - Bidirectional Forwarding Detection (BFD)
 
-## Direct Connect MACsec
+## Direct Connect - MACsec
 
-- Partially improves the long standing problem with DX: lack of built-in encryption
-- MACsec is standard, allows Layer 2 frames to be encrypted. It extends standard Ethernet
-- MACsec provides a hop by hop encryption architecture. 2 devices need to be next to each other
-- MACsec provides the following higher level features:
-    - Confidentiality (strong encryption at L2)
-    - Data Integrity (data can not be modified in transit without detection)
-    - Data origin authenticity
-    - Replay protection
-- MACsec does not replace IPSec over DX, MACSec is not end-to-end
-- MACsec is designed to allow super high speeds
-- Key components:
-    - **Secure Channel**: base component, each MACsec participant creates a secure channel used to send traffic to other participant (uni-directional traffic)
-    - Secure Channels are assigned an identifier (SCI)
-    - **Secure Associations**: communication that occurs at each secure channel, takes places as a series of transient sessions. Each secure channel generally has 1 secure association, exception when this associations are being replaced
-    - MACsec modified Ethernet frames by inserting a **16bytes MACsec** tag and also adds a 16 bytes **Integrity Check Value (ICV)**
-    - **MACsec Key Agreement** protocol: manages peer discovery, authentication and the generation of encryption keys
-    - **Cipher Suite**: how data is encrypted, controls the algorithm, packets per key, key rotation, etc.
+- It is a security feature that improves/partially improves a long-standing problem with DX: lack of builtin encryption
+- It is a standard which allows frames on the network to be encrypted. Frames are the unit of data which occur at the layer 2 of the OSI model
+- MACsec provides a hop by hop encryption architecture => 2 devices need to be next to each other at layer 2 to order MACsec (layer 2 adjacency)
+- MACsec features:
+    - *Confidentiality*: strong encryption at layer 2 by encryption the frame's EtherType and payload
+    - *Data integrity*: adds additional fields to ensure that data cannot be modified in transit without both parties being able to detect the modification
+    - *Data origin authenticity*: both parties can see that frames were been sent by other trusted peer
+    - *Replay protection*
+- MACsec does not replaces IPSEC over DX, it is not end-2-end!
+- It is designed to allow transfer for super high speeds for terabit networks
+- MACsec key components:
+    - **Secure Channel** (unidirectional): each MACsec participant creates a MACsec channel that is used to send traffic
+    - **Secure Channels are assigned an identifier (SCI)**: uniquely identifies a secure channel
+    - **Secure Associations**: communication that occurs on each secure channel, takes place as a series of transient sessions, multiple secure associations will take place on each secure channel over the lifetime of the connection. Each secure channel generally has 1 secure association at a time (exception when the associations are being replaced)
+    - **MACsec encapsulation**: 16 bytes **MACsec tag** & 16 bytes of Integrity Check Value (**ICV**). MACSec modifies Ethernet frames by inserting these tags
+    - **MACSec Key Agreement protocol**: manages discovery, authentication and key generation
+    - **Cipher Suite**: controls how the data is encrypted: algorithm, packets per key, key rotation
 
     ![NO MACsec](images/DXMACSec.png)
 
@@ -60,12 +63,23 @@
 
     ![MACsec Architecture Extended](images/DXMACSec4.png)
 
-- MACsec is not a substitute of IPSEC encryption!
+- MACsec can be defined either ona DX connection on a Link Aggregation Group (LAG)
+- Configuring MACsec: we associate a CAK/CKN pair with the connection on both the AWS DX router(s) and customer side's router
+- It is possible to extend MACsec from the DX location ot the customer side
+- This requires a dedicated physical extension of the cross connect to the business premises; this type of extension requires Layer 2 Adjacency
 
 ## DX Connection Process
 
-- Letter of Authorization Customer Facility Access (LOA-CFA): it is a form, which gives the authorization to one customer to get the data center staff to connect to the equipment of another customer
-- This form is able to be downloaded by a customer once a DX port has be provisioned within a DX location
+- A DX connection begins in a DX Location, which contains AWS equipment and also customer/provider equipment
+- AWS does not own this facility (neither does the provider) - it is a data center owned by a third party
+- A large data center is collection of cages, these cages are areas that specific customers rent
+- Only the staff at the data center can connect stuff together, only they have access to the space in-between the cages to connect different cages together
+- Connecting these cages can be done only by staff members only when they have authorization from all parties
+- The authorization is called **Letter of Authorization Customer Facility Access (LOA-CFA)**
+- It is form that gives the access from one customer to get the data center staff to connect to the equipment of another customer
+- DX connection process:
+
+![DX Connection Process](images/DXConnectionProcess.png)
 
 ## DX Virtual Interfaces BGP Session and VLAN
 
@@ -180,11 +194,11 @@
 - Control scope of how for to propagate our prefixes:
     - `7224:9100` - Local AWS Region
     - `7224:9200` - All AWS Regions for a continent
-        - North America–wide
+        - North America-wide
         - Asia Pacific
         - Europe, the Middle East, and Africa
     - `7224:9300` - Global (all public AWS Regions)
-- The communities `7224:1` – `7224:65535` are reserved by AWS Direct Connect. AWS Direct Connect applies the following BGP communities to its advertised routes:
+- The communities `7224:1` - `7224:65535` are reserved by AWS Direct Connect. AWS Direct Connect applies the following BGP communities to its advertised routes:
     - `7224:8100` - Routes that originate from the same AWS Region in which the AWS Direct Connect point of presence is associated
     - `7224:8200` - Routes that originate from the same continent with which the AWS Direct Connect point of presence is associated
     - No tag - Global (all public AWS Regions)
