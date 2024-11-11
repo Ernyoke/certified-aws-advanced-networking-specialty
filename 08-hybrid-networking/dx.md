@@ -107,20 +107,21 @@
 
 - They are used to access the resources inside 1 AWS VPC using private IP addresses
 - Resources can be accessed with their private IP using private VIFs, public IPs and Elastic IPs wont work
-- Private VIFs are associated with a Virtual Private Gateway (VGW) which can be associated to 1 VPC. This has to be in the same region where the DX location connection terminates
+- Private VIFs are associated with a Virtual Private Gateway (VGW) which can be associated to 1 VPC. This has to be **in the same region where the DX location connection terminates**
 - 1 Private VIF = 1 VGW = 1 VPC (there are ways around this using Transit VIFs)
 - There is no encryption on private VIFs, DX is not adding encryption and neither is the private VIFs (there are ways around this, example using HTTPS)
 - With private VIFs we can use normal or Jumbo Frames (MTU of 1500 or 9001)
+- A private VIF that terminates in a VGW can use route propagation. This allows routes learned from the remote sites to be added to the route tables automatically
 - Using VGW, route propagation is enabled by default
 - Creating private VIFs:
     - Pick the connection the VIF will run over
     - Chose VGW (default) or Direct Connect Gateway
     - Chose who owns the interface (this account or another account)
     - Choose a VLAN id - 802.1Q which needs to match the customer config
-    - We need to enter the BGP ASN of on-premises (public or private). If private use 64512 to 65535
+    - We need to enter the BGP ASN of on-premises. For a private VIF this can be a public ASN we own or a private ASN. If private we need to use one from 64512 to 65535 range
     - We can choose IPs or auto generate them
-    - AWS will advertise the VPC CIDR range and the BGP Peer IPs (`/30`)
-    - We can advertise default or specific corporate prefixes (**max 100** - this is HARD limit, the interface will go into an idle state)
+    - AWS will advertise the VPC CIDR range and the BGP Peer IPs which will use `/30` prefixes
+    - We can advertise default prefix or specific corporate prefixes (**max of 100 prefixes** - this is HARD limit, the interface will go into an idle state)
 - Private VIFs architecture:
 
     ![Private VIFs Architecture](images/DXPrivateVIFS.png)
@@ -136,12 +137,12 @@
 ## Public VIFs
 
 - Are used to access AWS public zone services: both public services and services which have a public Elastic IP
-- They offer no direct access to private VPC services
-- We can access all public zone regions with one public VIF across AWS global network
+- They offer **no direct access to private VPC services**
+- We can access **all public zone regions with one public VIF** across AWS global network
 - AWS advertises all AWS public IP ranges to us, all traffic to AWS services will go over the AWS global network
 - We can advertise any public IPs we own over BGP, in case we don't have public IPs, we can work with AWS support to allocate some to us
 - Public VIFs support bi-directional BGP communities
-- Advertised prefixes are not transitive, our prefixes don't leave AWS
+- Advertised prefixes are not transitive, our prefixes don't leave AWS. This includes other customers, meaning we can route through a public VIF to other customer IP addresses (if they use Elastic IP addresses, routing will work)
 - Create a public VIF:
     - We pick the connection the VIF will run over
     - We chose the interface owner (this account or another)
@@ -157,12 +158,14 @@
 ## Direct Connect Public VIF + VPN
 
 - Using a VPN gives us an encrypted and authenticated tunnel
-- Architecturally, having a VPN over DX uses a Public VIF + VGW/TGW public endpoints
+- Architecturally, having a VPN over DX uses a **Public VIF + VGW/TGW public endpoints**
 - With a VPN we connect to public IPs which belong to a VGW or TGW
 - A VPN is transit agnostic: we can connect using a VPN to VGW or a TGW over the internet or over DX
-- A VPN is end-to-end encryption between a Customer Gateway (CGW) and TGW/VGW, while MACsec is single hop based
-- VPNs have wide vendor support
-- VPNs have more cryptographic overhead compared to MACsec
+- VPN vs MACSec:
+    - A VPN is end-to-end encryption between a Customer Gateway (CGW) and TGW/VGW, while MACsec is single hop based
+    - VPNs have wide vendor support
+    - VPNs have more cryptographic overhead compared to MACsec
+    - VPN running over a IPSec does not compete with MACsec, VPNs serve to have end-to-end encryption from AWS to on-premises, MACsec provides hop by hop encryption
 - A VPN can be provided immediately, can be used while DX is provisioned and/or as a DX backup
 
     ![VPN over DX](images/DXPublicVIFVPN.png)
@@ -170,11 +173,11 @@
 # BFD - Bidirectional Forwarding Detection with Direct Connect
 
 - BFD is used to improve failover times
-- It reduces the time to require to failover between VGWs
-- Without BFD, the failover works as following: BGP sends `Keep-alives` every 30 seconds and has a concept of a hold-down timer (starts from 0 and counts to 90). Whenever a `Keep-alive` is received, the timer is reset. If it reaches 90, the VIF is considered unreachable
+- It reduces the time to require to failover between 2 direct connect VIFs
+- Without BFD, the failover works as following: BGP sends `Keep-alives` every 30 seconds and has a concept of a hold-down timer (starts from 0 and counts to 90). Whenever a `Keep-alive` is received, the timer is reset. It can take up to 90 for the VIF to be considered unreachable
 - With BFD, failover can occur in less than a second. BFD has a concept of liveness detection interval (300ms)
 - BFD also has a concept of multiplier (default is 3) => failover can occur in 900ms
-- BFD is enabled on VIFs by default, but in oder to work, it has to be enabled on the customer side using BGP options configuration
+- BFD is enabled on all DX VIFs by default, but in oder to work, it has to be configured on the customer side using BGP options
 
 ## BGP Communities
 

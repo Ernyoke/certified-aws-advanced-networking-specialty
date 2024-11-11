@@ -51,3 +51,72 @@
     - We create a route table and we configure all attachments to propagate to the route table
     - We associate the route table with only the attachments we would want to communicate with each other
     - We create another route and associate it to the attachment we don't want to communicate with each other. We configure other attachments to propagate to this route table
+
+## AZ Affinity and Appliance Mode
+
+- AZ Affinity:
+    - Transit Gateway tries to keep the traffic in the same originating AZ until it reaches its destination
+    - Benefits:
+        - No cross-AZ data charges
+        - In case something fails, only one AZ is affected
+- Appliance mode:
+    - AZ Affinity may result in Asymmetric Routing (traffic comes back using a different route compared to how it went initially)
+    - This can be an issue if we are using network appliances that are stateful
+    - To solve this issue, we can enable **Appliance Mode**
+    - TGW uses the flow hash algorithm to select a the correct target for the return traffic
+
+## Transit Gateway Connect Attachment
+
+- We create a TGW Connect Attachment to establish a connection between a TGW and a third party virtual appliance (such as SD-WAN appliances) running in a VPC
+- A Connect attachment uses an existing VPC or AWS Direct Connect attachment as the underlying transport mechanism
+- Supports Generic Routing Encapsulation (GRE) tunnel protocol for high performance and BGP for dynamic routing (for Connect Attachments it is a must to have BGP peering)
+- Connect attachments do not support static routes. BGP is a minimum requirement for Transit Gateway Connect
+- TGW Connect supports a maximum bandwidth of 5 Gbps per GRE tunnel. Bandwith above 5 Gbps is achieved by advertising the same prefixes across multiple Connect peers (GRE tunnels) for the same Connect attachments
+- A maximum of 4 Connect peers are supported for each Connect attachments
+
+## Multicast
+
+- Multicast is a communication protocol used to deliver a single stream of data to multiple receiving computers simultaneously
+- Destination is a multicast group address:
+    - Class D: 224.0.0.0 - 239.555.555.555
+- The multicast protocol is connectionless, based on UDP and one way communication
+- Multicast components:
+    - Multicast Domain
+    - Multicast Group and member
+    - Multicast source and receivers
+    - Internet Group Management Protocol (IGMP) used for group membership management
+- Multicast has to be enabled on the TGW at creation, afterwards it cannot be enabled
+- Supports both IPv4 and IPv6 addressing
+- Supports hybrid integration with external applications
+- Supports both static (API based) and Dynamic group membership through IGMP (supports IGMPv2)
+- Multicast traffic in a VPC:
+    - We create a multicast domain and add the participating subnets
+    - We create a multicast group and associate group membership IP addresses (example: 224.0.0.100)
+    - We configure the group membership statically using CLI/SDK or dynamically using IGMPv2
+    - Now we can send traffic from source to multicast group IP
+- We can integrate multicast with external services (such as service from on-prem). TGW does not support multicast over DX! What we can do, is to connect our service to VPC using VPN or DX. After that we configure a virtual router inside the VPC and have a GRE tunnel with the on-prem service
+- Further considerations:
+    - A subnet can be part of only one multicast domain
+    - Hosts (ENIs) in the subnet can be part of one or more multicast groups within the multicast domain
+    - TGW issues an IGMPv2 QUERY message to all members every two minutes. Members renew their membership by responding with a IGMPv2 JOIN message
+    - Members that do not support IGMP must be added or removed from the group using the AWS console or CLI
+    - `Igmpv2Support` attribute determines how group members join or leave a multicast group. When the attribute is enabled, members can send JOIN or LEAVE messages
+    - `StaticSourceSupport` multicast domain attributes determine wether there are static multicast sources for the group
+    - A non-Nitro instance cannot be a multicast sender. If we use a non-Nitro instance as a receiver, we must disable Source/Destination check
+    - Multicast routing is not supported over DX, S2S VPN, TGW peering attachments or TGW Connect attachments
+    - Security group configuration on the IGMP host and any ACLs configuration on the host subnets must allow these IGMP protocol messages:
+        - NACL Inbound:
+            - IGMP(2) from `0.0.0.0/32` (IGMP QUERY sent to 224.0.0.1/32)
+            - UDP traffic
+        - NACL Outbound:
+            - IGMP(2) from `224.0.0.2/32` (for the IGMP LEAVE)
+            - IGMP(2) from the multicast group IP address (For the IGMP JOIN)
+            - UDP traffic
+        - SG Inbound:
+            - IGMP(2) from `0.0.0.0/32` (IGMP QUERY)
+            - UDP traffic traffic to the multicast IP address
+        - SG Outbound:
+            - IGMP(2) from `224.0.0.2/32` (for the IGMP LEAVE)
+            - IGMP(2) from the multicast group IP address (For the IGMP JOIN)
+            - UDP traffic to the multicast IP address
+- Multicast domains can be shared between AWS accounts with AWS RAM
