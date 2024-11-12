@@ -120,3 +120,41 @@
             - IGMP(2) from the multicast group IP address (For the IGMP JOIN)
             - UDP traffic to the multicast IP address
 - Multicast domains can be shared between AWS accounts with AWS RAM
+
+## Centralized Egress to Internet With NAT Gateway
+
+- We can uses a NAT gateway in each AZ for high availability and for saving inter AZ data transfer cost
+- If one AZ fails, all the traffic can be sent via the TGW and NAT gateway endpoints in another AZ
+- A NAT gateway can support up to 55_000 simultaneous connections to each unique destination
+- NAT gateways can scale from 5 Gbps to 100 Gbps
+- We can use Blackhole routes in the TGW route tables to restring inter-VPC traffic
+- This architecture does not offer a lot of cost savings compared to placing a NAT gateway in each VPC
+
+## Centralized Traffic Inspection with Gateway Load Balancer and Network Appliances
+
+- Using AWS PrivateLink, GWLB Endpoint routes traffic to the GWLB. Traffic is routed securely over Amazon network without any additional configuration
+- GWLB encapsulates the original IP traffic using GENEVE protocol and forwards it to the network appliance over UDP port 6081
+- GWLB uses 5-tuples or 3-tuples of an IP packet to pick an appliance for the life of the flow. This creates session stickiness to an appliance for the life of a flow required for stateful appliances like firewalls
+- This combined with TGW Appliance Mode provides session stickiness irrespective of source and destination AZ
+
+## Centralized VPC Interface Endpoints
+
+- VPC Interface Endpoints provide a regional level DNS entry and an AZ level DNS entry
+- The regional DNS will return the IP address for all the AZ level endpoints
+- In order to save the inter-AZ data transfer costs in case of a spoke VPC to the hub VPC, we can use the AZ specific DNS endpoint
+- Instead of using TGW, we can use VPC peering between the spoke VPCs and the centralized VPC. This can reduce costs, although we might have to pay attention to the limits of VPC peering (as of today VPC peering supports up to 125 peering connections)
+
+## VPC Peering vs Transit Gateway
+
+|                                    | VPC Peering                                                                                          | Transit Gateway                                                    |
+|------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| Architecture                       | One-to-one connection - Full mesh                                                                    | Hub and Spoke with multiple attachments                            |
+| Hybrid Connectivity                | Not supported                                                                                        | Supported hybrid connectivity via VPN and DX                       |
+| Complexity                         | Simple for fewer VPCs, complex as the number of VPCs increase                                        | Simple for any number of VPCs and hybrid network connectivity      |
+| Scale                              | 125 peering/VPC                                                                                      | 5000 attachments per TGW                                           |
+| Latency                            | Lowers                                                                                               | Additional Hop                                                     |
+| Bandwidth                          | No limit                                                                                             | 50 Gbps /  attachment                                              |
+| Ref Security Group                 | Supported                                                                                            | Not supported                                                      |
+| Subnet Connectivity                | For all subnets across AZs                                                                           | Only subnets within the same AZ in which TGW attachment is created |
+| Transitive Routing (ex IGW access) | Not supported                                                                                        | Supported (there is an ENI involved)                               |
+| TCO (cost)                         | Lowest - only data transfer cost (free within the same AZ, charged for cross AZ/cross region traffic | Pay per attachment + we pay for data transfer cost                 |
