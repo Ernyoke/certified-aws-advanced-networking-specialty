@@ -158,3 +158,10 @@
 | Subnet Connectivity                | For all subnets across AZs                                                                           | Only subnets within the same AZ in which TGW attachment is created |
 | Transitive Routing (ex IGW access) | Not supported                                                                                        | Supported (there is an ENI involved)                               |
 | TCO (cost)                         | Lowest - only data transfer cost (free within the same AZ, charged for cross AZ/cross region traffic | Pay per attachment + we pay for data transfer cost                 |
+
+## Sharing Transit Gateways with AWS RAM
+
+- We can share a TGW with other AWS accounts form our organization or with accounts outside of our organization
+- When an TGW is shared, AWS S2S VPN attachments must be created in the same AWS account that owns the TGW
+- If we are using DX Gateway to connect TGW to DX, we can use DX Gateways from other accounts
+- If a TGW is shared with an account, that account cannot create, modify or delete TGW route tables, or route table propagations and associations
