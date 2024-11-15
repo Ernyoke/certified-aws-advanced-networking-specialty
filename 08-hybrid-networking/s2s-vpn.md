@@ -61,3 +61,25 @@
 - AWS VPN supports the VPN termination behind NAT on customer side
 - With NAT Traversal we encapsulate our IPSec ESP header with an UDP header. With this we avoid breaking the NAT connectivity in case our customer gateway is behind a NAT
 - We must open UDP port 4500 on customer side firewall for NAT-T
+
+## VPN Transitive Routing Scenarios
+
+- We can reach the internet from on-premises if:
+    - There is a **NAT Instance** (self managed NAT) in the VPC to which the VGW is connected
+- VPC Peering:
+    - When using S2S VPN to connect to one VPC which is peered with another VPC, the traffic from on-prem to the peered VPC is not originating from the initial VPC. This means, we cannot reach resources from the peered VPC via S2S VPN
+- With Gateway Endpoints:
+    - Similarly to peering scenario, since traffic is not originating from the VPC, it cannot flow through the VPC Gateway Endpoint
+- VPC Interface Endpoints:
+    - VPC Interface endpoint creates an ENI inside the VPC
+    - Through this ENI we can reach the AWS services
+- Summary:
+    - From on-premises via VGW:
+        - We cannot access the internet through VPC attached Internet Gateway
+        - We cannot access the internet through NAT Gateway in a public subnet
+        - We cannot access peered VPC resources through VPC peering connection via AWS VGW
+        - We cannot access S3, DynamoDB via VPG Gateway endpoints
+        - We can access AWS services via interface endpoints
+        - We can access the internat with a managed NAT (NAT instance)
+    - From AWS to on-premises via customer gateway:
+        - We can access the internet and other network endpoints based on routing rules we setup on the VGW in on-premises network

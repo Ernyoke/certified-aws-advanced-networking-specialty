@@ -25,3 +25,6 @@
 - Requirements to work:
     - Each customer site needs to have an uniq ASN
     - Each VPN needs to end on the same VGW
+    - Sites must not have overlapping IP ranges
+- We can connect up to 10 CGW
+- Can serve as a failover connection between on-premises locations
