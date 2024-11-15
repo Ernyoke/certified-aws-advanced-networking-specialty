@@ -52,3 +52,10 @@
         - Domain lists allow us to define good or bad lists of domains including protocol types
         - For domain lists there is support for individual domains, wildcards, and there is support for headers in case of HTTP or SNI for HTTPS
         - For **IPS Rules** we need to use the suricata compatible format
+
+## Firewall Logging
+
+- We can configure AWS Network Firewall logging for our firewall's stateful engine
+- Logging gives us detailed information about network traffic, including the time that the stateful engine received a packet, detailed information about the packet, and any stateful rule action taken against the packet
+- The logs are published to the log destination that we've configured, where we can retrieve and view them
+- Firewall logging is only available for traffic that we forward to the stateful rules engine. We forward traffic to the stateful engine through stateless rule actions and stateless default actions in the firewall policy
