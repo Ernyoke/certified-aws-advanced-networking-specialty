@@ -59,4 +59,4 @@
 - We should use `ASPATH` prepending to get AWS to preference a specific DX for inbound traffic for the on-prem
 - AWS sets an MED of `100` on VPN BGP Sessions - meaning the default of 0 of DX is preferred
 - If we are using a VGW for both the VPN and DX, these will use the same ASN number, so MED will work
-- If we use a TGW in our architecture, we will potentially have different ASNs involved, se MED wont be use to select between different advertisements, unless we use the `bgp always-compare-med` on the customer router
+- If we use a TGW in our architecture, we will potentially have different ASNs involved, so MED wont be use to select between different advertisements, unless we use the `bgp always-compare-med` on the customer router

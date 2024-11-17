@@ -273,6 +273,6 @@
 - LAG do provide resilience, although AWS does not market them as such. They do not provide any resilience regarding hardware failure or the failure of entire location
 - LAGs use an Active/Active architecture, maximum 4 connection can be part of the LAG
 - All connections must have the same speed and terminate at the same DX location
-- `MinimumLinks`: the LAG is active as long as the number of working connections is greater or equal to this value
+- `minimumLinks`: the LAG is active as long as the number of working connections is greater or equal to this value
 
     ![DX LAG](images/DirectConnectLAG.png)
