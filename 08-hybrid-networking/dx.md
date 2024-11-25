@@ -102,6 +102,31 @@
     - VLAN for isolation of traffic
     - BGP for exchanging prefixes
     - MD5 authentication
+- VIF parameters:
+    - Connection: AWS DX connection or LAG
+    - VIF Type: public, private or transit
+    - VIF Name: anything we want to name a VIF
+    - VIF Owner: our AWS account or other AWS account in case we want to create a hosted VIF
+    - Gateway Type:
+        - Virtual Private Gateway (VGW)
+        - Direct Connect Gateway
+    - VLAN:
+        - VLAN tag, should not be duplicate on the same DX connection (1-4094)
+        - For hosted connection VLAN ID is already configured by the partner
+    - BGP address Family: IPv4 or IPv6
+    - BGP Peer IP Addresses: depends if we are using a public or private VIF
+        - For a public VIF (IPv4): we need to provide the public IPs (/30) allocated by our BGP session. If we don't have public IP ranges, we can ask AWS to allocate for us
+        - For private VIF (IPv4): we can provide any private IP from the range of 169.254.0.0/16. If we skip it, AWS will pick a range for us
+        - In case of IPv6 addresses Amazon automatically allocates us a /125 IPv6 CIDR. We cannot specify our own peer IPv6 addresses
+    - BGP ASN:
+        - For VIF creation we can use either public or private ASN numbers assigned to our router
+        - Public ASN number must be owned by the customer and it has to be assigned by IANA
+        - Private ASN can be set by us and must be between 64512 - 65534 (16 bit) or 1 to 2147483647 (32 bit)
+    - BGP MD5 authentication key: if not provided, AWS we generate one for us
+    - For public VIFs we need to specify the prefixes to be advertised from on-premises side
+    - Jumbo Frames (private and transit VIF only):
+        - Private VIF: we can have jumbo frames up to 9001 bytes MTU (default is 1500 MTU)
+
 
 ## Private VIFs
 
@@ -133,6 +158,9 @@
     - VGW has an AWS assigned
     - Over the private VIF runs the BGP with IPv4 or IPv6 (separate BPG peering connections)
     - We configure our own AS on the VIF, which can be private ASN or public ASN
+- With a private VIF we cannot access the following things from a VPC:
+    - Route53 DNS resolver (base + 2 address). We can access it using Route53 inbound endpoint
+    - VPC Gateway Endpoints
 
 ## Public VIFs
 
@@ -151,9 +179,11 @@
     - Configure authentication and select optional peering IP addresses
     - We have to select which prefixes we want to advertise
 
-- Private VIFs architecture:
+- Public VIFs architecture:
 
     ![Public VIFs Architecture](images/DXPublicVIFS.png)
+
+- From a customer router to AWS maximum of 1000 route prefixes can be advertised per BGP session
 
 ## Direct Connect Public VIF + VPN
 
@@ -244,6 +274,50 @@
 - DX Gateway routing problems:
     - DX gateway only allows communications from a private VIF to any associated virtual private gateways
     - With a transit gateway we can solve this, if we connect the DX gateway to a transit gateway (works only in one region)
+- The ASN for the transit gateway and the one for the DX Gateway must be different, otherwise the association between them will fail
+
+## Direct Connect SiteLink
+
+- SiteLink connects on-premises networks through the AWS global network backbone
+- Without SiteLink, DX Gateway cannot allow the routing of the traffic between on-premises sites. The solution to this was to use 2 DX gateways and transit gateways
+- The downside with this approach was extra cost, additional hops and latency of the network
+- With SiteLink, we can directly route traffic from the direct connect location using one single DX gateway. What we have to do is the followings:
+    - Provision one a private VIF or a transit VIF for each DX connection
+    - Make sure we connect the on-premises to the same DX Gateway
+    - Enable SiteLink on bot VIFs
+- Features of SiteLink:
+    - SiteLink can be enabled for a Private VIF or a Transit VIF (not supported for Public VIF)
+    - It has additional costs when enabled ($0.5 per hour + data transfer costs), enable it only if needed
+    - Supported on any combinations of dedicated or hosted DX connections with different port speeds
+    - The traffic takes the shortest path for the traffic sent over AWS global network
+    - SiteLink can be enabled/turned off on existing VIFs
+    - Supports both IPv4 and IPv6 routing prefixes
+    - Supports full mesh or isolated network connections between customer locations (for isolated routing we need multiple DX gateways)
+
+## DX Active-Active Connection using Public VIFs
+
+- If we are using a public ASN:
+    - The customer gateway can advertise the same prefix with BGP protocol attributes on both public virtual inferfaces
+    - This configuration load balances traffic over both public virtual interfaces
+    - AWS uses a protocol named ECMP (Equal-Cost Multipath) for load balancing the traffic
+- If we are using a private ASN:
+    - Load balancing on a public virtual interface is not possible with a private ASN
+
+## DX Active-Passive Connections using Public VIFs
+
+- If we are using a public ASN:
+    - CGW can advertise the same prefix (public IP or network that we own) on both BGP sessions
+    - The have a passive route we advertise the on-premises public prefixes with additional AS_PATH prepends in the BGP attributes for the secondary connection
+    - Additionally we can increase the Local Preference to be sure that the on-prem router always chooses the correct path for sending the traffic to AWS
+- If we are using a private ASN:
+    - Longer prefixes have to be sent on the primary connection
+
+## Private VIF Routing Policies
+
+- AWS evaluates the longest prefix match first
+- If the prefixes are the same, AWS uses the distance from the local region to the AWS DX location to determine the virtual (or transit) interface for routing
+- The behavior can be modified by assigning a local preference BGP communities (7224:7300 > 7224:7200 > 7224:7100)
+- I case of multiple VIF in the same location, we can set the AS_PATH attribute to prioritize which interface AWS uses to route the traffic
 
 ## Direct Connect Resilience and HA
 
@@ -276,3 +350,72 @@
 - `minimumLinks`: the LAG is active as long as the number of working connections is greater or equal to this value
 
     ![DX LAG](images/DirectConnectLAG.png)
+
+## DX Billing
+
+- There are multiple charges with DX:
+    - Port-hour charges as per the DX connection type and capacity:
+        - By capacity we understand the network speed
+        - Type: dedicated/hosted
+    - Data transfer out charges: AWS -> on-prem/DX location. There are no charges for data transfer into AWS
+        - Data transfer charges are calculated by GB
+        - These calculation depend on the DX location and source AWS region
+- Who pays for DX charges?
+    - In case of a single account owning and using the DX connection, then it is obvious
+    - In case of multi-account:
+        - Port-hour charges:
+            - The account that owns the DX connection (the account which request the connection) pays for the port-hour charges
+            - Rule of thumb: for dedicated connections we are charged as soon as the connection is available. In case we don't proceed with the DX setup, we will be charged after 90 days even if the connection is still in down state
+            - For hosted connections port-hours are billed as soon as we accept the hosted connection
+            - Billing for port-hour charges stops when the dedicated/hosted connections are removed from the account. If the connection is in down state, the charging is not stopped for that period
+        - Data transfer out charges:
+            - Data transfer out charges are usually allocated to the account that owns the resource sending the traffic (exception: S3 with "Requester Pays" flag enabled)
+            - In case the traffic is sent through a transit gateway: data transfer out charges are allocated to the owner of the last resource to send traffic before it hits the DX VIF
+            - If the owner of the DX connection and owner of the resource sending the traffic are in different AWS Organizations, DTO costs are allocated to the owner of the resource sending traffic and charged as per the internet DTO rates for the specific service, not the DTO DX rate
+- Summary:
+    - DX charges can be port-hour charges and data transfer out (DTO) charges
+    - Port-hour charges depend on the DX capacity
+    - The AWS account which created the DX connection pays for the port-hour charges
+    - Data transfer out charges are usually allocated to the account that owns the resources sending the traffic (exception TGW)
+    - In case of multi organization setup, the DTO is charged to the resource owner account based on standard AWS service DTO rate and not the DX DTO rate
+
+## DX CloudWatch Metrics
+
+- *ConnectionState*: 1 indicates the connection is up, 0 indicates dow
+- *ConnectionBpsEgress*: bitrate for the outbound data from AWS
+- *ConnectionBpsIngress*: bitrate for the inbound data into AWS
+- *ConnectionPpsEgress*: packet rate for the outbound data from AWS
+- *ConnectionPpsIngress*: packet rate for the inbound data into AWS
+- *ConnectionErrorCount*: total error count for all types of AWS on the AWS device
+- *ConnectionLightLevelTx*: health of the fiber connection for outbound traffic from AWS
+- *ConnectionLightLevelRx*: health of the fiber connection for inbound traffic into AWS
+- *ConnectionEncryptionState*: 1 indicates the MACSec encryption is working, 0 indicates encryption is not working
+- There are similar metrics for VIFs as well: `VirtualInterfaceBpsIngress`, `VirtualInterfaceBpsEgress`, etc.
+
+## Troubleshooting DX Issues
+
+- When there is no physical connectivity (Layer 1 issues), we can check the followings:
+    - Cross connect is complete
+    - Ports are correct
+    - Routers are powered on
+    - Tx/Rx optical signals are receiving (check CloudWatch) => context colocation provider and get report on the Tx/RX signals
+    - CW Metrics for Physical error count for AWS devices
+- If the connection is UP but the VIFs are down (Layer 2 issues), we can check:
+    - IP addresses are correct
+    - VLAN IDs are correct
+    - Router MAC address is in the ARP table
+    - Try cleaning the ARP table
+    - VLAN trunking is enabled at intermediate devices
+- When BGP session is down:
+    - Check BGP ASN numbers
+    - Peer IPs are correct
+    - MD5 auth key is correct: has no extra spaces
+    - <= 100 prefixes for private VIF
+    - <= 1000 prefixes for public VIF
+    - Firewall not blocking TCP 179 port
+    - Check BGP logs
+- When we are not able to reach destination:
+    - Check advertising routes for on-premises prefixes
+    - For public VIF, it should be publicly routable prefixes
+    - Check security groups and NACLs
+    - Check VPC route tables
