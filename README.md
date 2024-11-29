@@ -54,11 +54,13 @@
     - [Amazon Workspaces](09-hybrid-services/workspaces.md)
     - [FSx](09-hybrid-services/fsx.md)
     - [Storage Gateway](09-hybrid-services/storage-gateway.md)
-10. Network Billing and Cost Management
-    - [VPC Cost Management](10-cost-management/vpc-cost-management.md)
-    - [DX Cost Management](10-cost-management/dx-cost-management.md)
-11. Disaster Recovery
-    - [DR/BC Architecture](11-dr/dr.md)
+10  EKS Networking
+    - [Kubernetes and EKS Networking](10-eks-networking/kubernetes.md)
+11. Network Billing and Cost Management
+    - [VPC Cost Management](11-cost-management/vpc-cost-management.md)
+    - [DX Cost Management](11-cost-management/dx-cost-management.md)
+12. Disaster Recovery
+    - [DR/BC Architecture](12-dr/dr.md)
     
 ## Exam Description
 
