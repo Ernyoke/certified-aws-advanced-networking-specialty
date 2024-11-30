@@ -62,6 +62,9 @@
     - [DX Cost Management](11-cost-management/dx-cost-management.md)
 12. Disaster Recovery
     - [DR/BC Architecture](12-dr/dr.md)
+13. Network Management and Governance
+    - [AWS Network Manager](13-network-management-and-governance/aws-network-manager.md)
+    - [IPAM - IP Address Management](13-network-management-and-governance/ipam.md)
     
 ## Exam Description
 
