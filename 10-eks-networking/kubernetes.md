@@ -126,3 +126,71 @@
     - A VPC resource controller add-on named `amazon-vpc-resource-controller-k8s` managed Trunk and Branch Network Interfaces
     - When `ENABLE_POD_ENI=true`, VPC resource controller creates special network interface called a trunk network interface with description "aws-k8s-trunk-eni" and attaches it to the node
     - The controller also creates branch ENIs with description "aws-k8s-branch-eni" and associates them with the trunk interface
+    - Each pod gets dedicated ENI (branch ENI) mapped to trunk ENI
+    - Independent Security Groups can be assigned for each pod
+    - Limitations:
+        - Trunk and Branch ENIs cannot be used with Windows nodes
+        - If the cluster is using IPv6 address family then this feature only works with Fargate nodes
+        - Supported by most Nitro based systems (aside from t instance family)
+
+## Exposing Kubernetes Services
+
+- Accessing applications by their pod's IP address is usually an anti-pattern because:
+    - Pods are non-permanent objects
+    - Pods may be created/destroyed
+    - Pods move between the cluster's nodes due to scaling events, node replacement or configuration
+- Kubernetes Service is a way to expose an application on a set of pods as a network service
+- Kubernetes and EKS support the following Service types:
+    - ClusterIP (access services from inside EKS cluster using virtual IPs)
+    - NodePort (access services externally using node's static port)
+    - LoadBalancer (Network load balancing, access services externally using CLB/NLB Layer 4)
+    - Ingress (Application load balancing, access services externally using ALB Layer 7)
+- ClusterIP:
+    - Default service type in k8s
+    - Makes a service reachable  only from withing the cluster
+    - Service is exposed on a virtual IP on each node. This IP is not exposed outside of cluster
+    - The service virtual IP is assigned from a pool which is configured by setting following parameter in kube-apiserver: `--service-cluster-ip-rage`
+    - If not configured explicitly then Amazon EKS provisions either 10.100.0.0/16 or 172.20.0.0/16 range for this virtual IP
+    - A kube-proxy daemon on each cluster node defines the ClusterIP to Pod IP mapping in iptables rules
+    - Service is accessible with private DNS `<service-name>.<namespace-name>.svc.cluster.local`
+- NodePort:
+    - NodePort is used to make a Kubernetes service accessible from outside the cluster
+    - Exposes the service on each worker node's IP at a static port, called the NodePort
+    - One Node port per service
+    - Port range: 30000-32767
+    - NodePort internally used ClusterIP to route the NodeIP/Port requests to ClusterIP service
+    - Not a feasible option to expose service to the outside world!
+
+## EKS Network and Application Load Balancing
+
+- `ServiceType=LoadBalancer`:
+    - For Network Load Balancer we should use `ServiceType=LoadBalancer`
+    - Originally the LoadBalancer service type in EKS used to be handled by Kubernetes Controller Manager (in-tree cloud controller)
+    - Deploys AWS CLB (default) or NLB in instance mode
+    - Supports Layer 4 with NLB and Layer 4/7 with CLB
+    - Supported by the newer controller called AWS Load Balancer Controller with which we can use NLB (CLB is not recommended to be used)
+    - AWS Load Balancer Controller supports registering services both in instance mode an IP mode
+    - Each service needs a dedicated NLB => scaling and management is a challenge for huge number of services
+- `ServiceType=Ingress`:
+    - For Application Load Balancer we should use `ServiceType=Ingress`
+    - Handled by AWS Load Balancer Controller
+    - Deploys ALB in instance and IP mode for ingress resources
+    - Exposes services to the clients outside of the cluster
+    - Ingress exposes HTTP and HTTPS routes from outside the cluster o services withing the cluster
+    - We can also share ALB with multiple services by using the following annotation: `alb.ingress.kubernetes.io/group.name: my-group`
+    - Traffic for IPv6 is supported for IP targets only
+- Preserving client IP address:
+    - In case of NLB with LoadBalancer service:
+        - `externalTrafficPolicy` service spec defines how load-balancing happens in the cluster
+            - `externalTrafficPolicy=Cluster`: traffic may be sent to another node, source IP is changed to node's IP address, thereby the IP of the client is not preserved. Load is evenly spread (default policy)
+            - `externalTrafficPolicy=Cluster`: traffic is not routed outside of the node and client IP addresses are propagated to the pods. This policy could result in uneven distribution of traffic
+    - For ALB ingress service:
+        - HTTP header `X-Forwarded-For` is used to get the client IP
+
+## EKS Custom Networking
+
+- We can allocated secondary CIDR to the VPC in the range of 100.64.0.0/16
+- The constraint with this CIDR is that the IP addresses are only routable from within the VPC. Traffic from the outside cannot directly go to these addresses
+- To be able to use these IP addresses we can enable VPC CNI Custom Networking
+- VPC CNI plugin creates a secondary ENI in the separate subnet, the range of the subnet can be from 100.64.0.0/16 range
+- Once enabled only IPs from secondary ENI are assigned to pods

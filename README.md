@@ -11,6 +11,7 @@
     - [Route 53 Fundamentals](01-fundamentals/route53.md)
     - [VLANs, Trunks and Q-in-Q](01-fundamentals/vlan.md)
     - [Jumbo Frames and MTU](01-fundamentals/jumbo.md)
+    - [Reserved IPv4 Ranges](01-fundamentals/reserved-ipv4-ranges.md)
 2. Virtual Private Cloud
     - [VPC](02-vpc/vpc.md)
     - [VPC Endpoints](02-vpc/vpc-endpoints.md)
