@@ -317,7 +317,7 @@
 - AWS evaluates the longest prefix match first
 - If the prefixes are the same, AWS uses the distance from the local region to the AWS DX location to determine the virtual (or transit) interface for routing
 - The behavior can be modified by assigning a local preference BGP communities (7224:7300 > 7224:7200 > 7224:7100)
-- I case of multiple VIF in the same location, we can set the AS_PATH attribute to prioritize which interface AWS uses to route the traffic
+- In case of multiple VIF in the same location, we can set the AS_PATH attribute to prioritize which interface AWS uses to route the traffic
 
 ## Direct Connect Resilience and HA
 

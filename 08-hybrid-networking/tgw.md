@@ -146,18 +146,18 @@
 
 ## VPC Peering vs Transit Gateway
 
-|                                    | VPC Peering                                                                                          | Transit Gateway                                                    |
-|------------------------------------|------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| Architecture                       | One-to-one connection - Full mesh                                                                    | Hub and Spoke with multiple attachments                            |
-| Hybrid Connectivity                | Not supported                                                                                        | Supported hybrid connectivity via VPN and DX                       |
-| Complexity                         | Simple for fewer VPCs, complex as the number of VPCs increase                                        | Simple for any number of VPCs and hybrid network connectivity      |
-| Scale                              | 125 peering/VPC                                                                                      | 5000 attachments per TGW                                           |
-| Latency                            | Lowers                                                                                               | Additional Hop                                                     |
-| Bandwidth                          | No limit                                                                                             | 50 Gbps /  attachment                                              |
-| Ref Security Group                 | Supported                                                                                            | Not supported                                                      |
-| Subnet Connectivity                | For all subnets across AZs                                                                           | Only subnets within the same AZ in which TGW attachment is created |
-| Transitive Routing (ex IGW access) | Not supported                                                                                        | Supported (there is an ENI involved)                               |
-| TCO (cost)                         | Lowest - only data transfer cost (free within the same AZ, charged for cross AZ/cross region traffic | Pay per attachment + we pay for data transfer cost                 |
+|                                    | VPC Peering                                                                                           | Transit Gateway                                                    |
+|------------------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| Architecture                       | One-to-one connection - Full mesh                                                                     | Hub and Spoke with multiple attachments                            |
+| Hybrid Connectivity                | Not supported                                                                                         | Supported hybrid connectivity via VPN and DX                       |
+| Complexity                         | Simple for fewer VPCs, complex as the number of VPCs increase                                         | Simple for any number of VPCs and hybrid network connectivity      |
+| Scale                              | 125 peering/VPC                                                                                       | 5000 attachments per TGW                                           |
+| Latency                            | Lowers                                                                                                | Additional Hop                                                     |
+| Bandwidth                          | No limit                                                                                              | 50 Gbps /  attachment                                              |
+| Ref Security Group                 | Supported                                                                                             | Not supported                                                      |
+| Subnet Connectivity                | For all subnets across AZs                                                                            | Only subnets within the same AZ in which TGW attachment is created |
+| Transitive Routing (ex IGW access) | Not supported                                                                                         | Supported (there is an ENI involved)                               |
+| TCO (cost)                         | Lowest - only data transfer cost (free within the same AZ, charged for cross AZ/cross region traffic) | Pay per attachment + we pay for data transfer cost                 |
 
 ## Sharing Transit Gateways with AWS RAM
 

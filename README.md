@@ -39,6 +39,7 @@
     - [Amazon Macie](07-security/macie.md)
     - [AWS Inspector](07-security/inspector.md)
     - [AWS Control Tower](07-security/control-tower.md)
+    - [AWS Firewall Manager](07-security/firewall-manager.md)
 8. Hybrid Networking
     - [IPSEC VPN Fundamentals](08-hybrid-networking/ipsec.md)
     - [VGW - Virtual Private Gateway](08-hybrid-networking/vgw.md)
@@ -55,7 +56,7 @@
     - [Amazon Workspaces](09-hybrid-services/workspaces.md)
     - [FSx](09-hybrid-services/fsx.md)
     - [Storage Gateway](09-hybrid-services/storage-gateway.md)
-10  EKS Networking
+10. EKS Networking
     - [Kubernetes and EKS Networking](10-eks-networking/kubernetes.md)
 11. Network Billing and Cost Management
     - [VPC Cost Management](11-cost-management/vpc-cost-management.md)
