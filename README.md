@@ -69,11 +69,14 @@
     
 ## Exam Description
 
-The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended for individuals who perform an AWS Networking Specialist’s role. The exam validates advanced technical skills and experience for design and implementation of AWS and hybrid IT network architectures at scale. The exam is for individuals who perform complex networking tasks. It validates an individual’s ability to do the following:g
-- Design, develop, and deploy cloud-based solutions by using AWS
-- Implement core AWS services according to basic architectural best practices
-- Design and maintain network architecture for all AWS services
-- Use tools to automate AWS networking tasks
+The AWS Certified Advanced Networking - Specialty (ANS-C01) exam is intended for individuals who perform an AWS networking specialist’s role. The exam validates a candidate's ability to design, implement, manage, and secure AWS and hybrid network architectures at scale.
+
+The exam also validates a candidate’s ability to complete the following tasks:
+- Design and develop hybrid and cloud-based networking solutions by using AWS
+- Implement core AWS networking services according to AWS best practices
+- Operate and maintain hybrid and cloud-based network architecture for all AWS services
+- Use tools to deploy and automate hybrid and cloud-based AWS networking tasks
+- Implement secure AWS networks using AWS native networking constructs and services
 
 ## Preparation
 
@@ -94,10 +97,8 @@ The AWS Certified Advanced Networking – Specialty (ANS-C00) exam is intended f
 
 | **Domain**                                                              | **% of Examination** |
 |-------------------------------------------------------------------------|----------------------|
-| Domain 1: Design and implement hybrid IT network architectures at scale | 24%                  |
-| Domain 2: Design and implement AWS networks                             | 28%                  |
-| Domain 3: Automate AWS tasks                                            | 8%                   |
-| Domain 4: Configure network integration with application services       | 14%                  |
-| Domain 5: Design and implement for security and compliance              | 12%                  |
-| Domain 6: Manage, optimize, and troubleshoot the network                | 14%                  |
+| Domain 1: Network Design                                                | 30%                  |
+| Domain 2: Network Implementation                                        | 26%                  |
+| Domain 3: Network Management and Operation                              | 20%                  |
+| Domain 4: Network Security, Compliance, and Governance                  | 24%                  |
 | **Total**                                                               | **100%**             |
