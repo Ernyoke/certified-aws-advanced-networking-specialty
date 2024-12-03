@@ -94,7 +94,7 @@
 - Public VIFs are used to connect to public AWS services or services from VPCs with public IP addressing
 - Private VIFs are used to connect to private VPC resources
 - Transit VIFs allow integration between DX and Transit Gateways
-- A single DX connection can have at total 50 Public/Private VIFs and 1 Transit VIF, for hosted connection we can have 1 VIF
+- A single DX connection can have at total 50 Public/Private VIFs and 4 Transit VIFs, for hosted connection we can have 1 VIF
  
     ![DX VIFs + VLAN](images/DXBGPSessonVLAN.png)
 
@@ -264,7 +264,7 @@
 
    ![DX-TGW Architecture](images/DXGateway4.png)
 
-- A DX supports up to 50 public and private VIFs and only 1 Transit VIF
+- A DX supports up to 50 public and private VIFs and up to 4 Transit VIF
 - We can connect up to 3 Transit Gateways connected to a Direct Connect connection
 - An individual DX gateway can be used with VPCs and private VIFs or with Transit Gateways and transit VIFs, **NOT BOTH** at the same time!
 - Consideration:
