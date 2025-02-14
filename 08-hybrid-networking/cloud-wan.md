@@ -137,6 +137,20 @@
         - With this we connect the VPCs from the TGW to the CloudWAN segment
 
 ## AWS Cloud WAN and Direct Connect
+- The new capability enables you to directly attach your Direct Connect gateways to Cloud WAN without the need for an intermediate AWS Transit Gateway.
 
-- As of today there is no direct attachment for connecting DX networks to Cloud WAN
-- The connection can be established with a Transit Gateway
+### Limitations for the Direct Connect gateway attachments
+- Can't configure static routes, they must be dynamically advertised.
+- BGP Communities are not supported.
+- Can't configure a list of allowed prefixes to be advertised over the DGW attachment from Cloud WAN to an on-premise network.
+- The ASN of a DGW must be outside the ASN range configured for the core network.
+
+### Route propagation
+#### Inbound routes
+- Via BGP in the segment route-tables.
+- Can be routed across all AWS Regions for that segment.
+- Cloud WAN follows the route evaluation order for the same prefixes learned over multiple attachments.
+#### Outbound routes
+- From segment route table to the DGW via BGP.
+- Each core network edge association advertises only its local routes.
+- The AS_PATH is retained when advertised to on-premise.
