@@ -36,7 +36,7 @@
 - Example:
     ```json
     {
-        "version: "2021.12",
+        "version": "2021.12",
         "core-network-configuration": {
             "asn-ranges": ["64512-65534"],
             "inside-cidr-blocks": ["100.65.0.0/16"],
@@ -49,7 +49,7 @@
                 }
             ]
         },
-        "segments: [
+        "segments": [
             {
                 "name": "sales"
             },
@@ -58,7 +58,7 @@
             },
             {
                 "name": "iot",
-                "isolate-attachments": true"
+                "isolate-attachments": "true"
             },
         ]
     }
