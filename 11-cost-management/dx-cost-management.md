@@ -3,7 +3,7 @@
 ## Transit Gateway Billing
 
 - For a single region:
-    - TGWs are billed per an hourly charge per attachment. The account, who ones the entity which is attached to the gateway, will be charged
+    - TGWs are billed per an hourly charge per attachment. The account, who owns the entity which is attached to the gateway, will be charged
     - TGWs are also billed on per a GB processed data. The account who owns the TGW is charged
     - For VPN attachments there are additional VPN charges. These are same charges which would apply to a VPN connected to Virtual Private Gateway
 - For TGW peering cross region:
