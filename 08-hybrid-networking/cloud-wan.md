@@ -109,7 +109,7 @@
             "require-acceptance": true
         }
     }
-    ...
+    
     ```
 - Rule number:
     - 1 - 65535
