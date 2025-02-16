@@ -1,7 +1,7 @@
 # Advanced EC2 Networking
 
 - EC2 instances are created with a primary ENI (Elastic Network Interface). This cannot be detached or removed
-- Additional ENIs can be added at creation time of afterwards
+- Additional ENIs can be added at creation time or afterwards
 - ENIs should be on the same region in order to be attachable to EC2 instances
 - Secondary ENIs can be attached and re-attached to other EC2 instances. EC2 instances can have more than one ENIs attached
 - ENIs are tied to AZs. ENIs can be placed on different subnets as long as they remain in the same AZ
