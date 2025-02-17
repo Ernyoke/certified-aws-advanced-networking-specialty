@@ -21,8 +21,9 @@
 - By default every resource uses private IPs, public IPs are used when we want to allow other people to access our resources from the internet
 - A VPC should have 1 primary private IPv4 CIDR block. This has to be specified when the VPC is created
 - This primary CIDR block has the following restrictions:
-    - Min /28 (16 IPs, some of the them cannot be used)
+    - Min /28 (16 IPs, 5 cannot be used because AWS allocates them to services necessary for the VPC by default)
     - Max /16 (65536 IPs)
+    - Formula to calculate total IPs available: (2^32-n)-5 , where n = CIDR range
 - Optionally we can add secondary IPv4 blocks, max 5 (can be increased with a ticket to the support)
 - Optional, a single assigned IPv6 /56 CIDR block can be assigned to the VPC
 - IPv6 block can be picket by AWS or we can use addresses we own. We cannot pick a CIDR range as with IPv4, we either let AWS pick a block or use addresses that we own
