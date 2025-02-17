@@ -32,7 +32,7 @@
 ## DNS in VPC
 
 - AWS VPCs have fully featured DNS
-- This is provided nby Route 53
+- This is provided by Route 53
 - The DNS inside of a VPC is available at the Base IP + 2 address (example: 10.0.0.0 -> DNS ip is 10.0.0.2)
 - DNS options for VPCs:
     - `enableDnsHostNames`: indicates if instances with public IP addresses in a VPC get public hostnames
