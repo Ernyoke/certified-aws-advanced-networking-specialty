@@ -25,7 +25,7 @@
     - We have to decide on creation if the LB is internal or internet facing (have public IP addresses or not)
 - Listener configuration: controls what the LB is listening to (what protocols, ports will be accepted at the listener side of the load balancer)
 - An internat facing load balancer can connect to both public and private instances
-- Minimum subnet size for a LB is /28 - 8+ fee addresses per subnet (AWS suggests a minimum of /27)
+- Minimum subnet size for a LB is /28 - 8+ free addresses per subnet (AWS suggests a minimum of /27)
 
 ## Cross-Zone Load Balancing
 
@@ -35,7 +35,7 @@
 
 ## Other Architectural Considerations
 
-- When an ELB is provisioned, we see it as one device which runs in 2 ore more AZs
+- When an ELB is provisioned, we see it as one device which runs in 2 or more AZs
 - What actually is created is one ELB node per subnet in each AZ that the LB is configured in
 - We are also creating a DNS record for that LB which spreads the incoming requests through all the active nodes for the LB
 - Nodes in one subnet per AZ can scale

@@ -1,7 +1,7 @@
 # Advanced EC2 Networking
 
 - EC2 instances are created with a primary ENI (Elastic Network Interface). This cannot be detached or removed
-- Additional ENIs can be added at creation time of afterwards
+- Additional ENIs can be added at creation time or afterwards
 - ENIs should be on the same region in order to be attachable to EC2 instances
 - Secondary ENIs can be attached and re-attached to other EC2 instances. EC2 instances can have more than one ENIs attached
 - ENIs are tied to AZs. ENIs can be placed on different subnets as long as they remain in the same AZ
@@ -34,8 +34,8 @@
 - SR-IOV - Single Route IO-Virtualization
 - Networking in EC2 is traditionally virtualized
 - With VM generally each physical network interface (NIC) is shared between instances, and the hypervisor mediates access between the instances
-- Wether an OS is running in a virtualized environment or physical environment, it expects to have direct access to the NIC
-- It uses a special type of instruction know as privileged instructions. These means that the os has direct access to the HW
+- Whether an OS is running in a virtualized environment or physical environment, it expects to have direct access to the NIC
+- It uses a special type of instruction known as privileged instructions. These means that the os has direct access to the HW
 - In case of hypervisor, it looks for these calls and it traps them and redirects them to the physical HW. These process comes with a performance hit
 - One way to get around this performance hit is to use device passthrough (1 VM <=> 1 NIC). This limits the ability to migrate the instance and impacts the ability of the VM to cope with other HA events
 - Other option is SR-IOV: allows multiple VMs to access the same NIC without performance hits
@@ -45,7 +45,7 @@
     ![PCI Passthrough Architecture](images/EnhancedNetworking2.png)
 
 - Enhanced Networking Architecture (SR-IOV):
-    - The network interface cards are virtual aware
+    - The network interface cards are virtually aware
     - Each network card is creating a virtual function (virtual network cards)
     - This functions offer a cut-down feature set enough to send/receive data
     - The management of the overall card is performed by the physical functions offering full functionality

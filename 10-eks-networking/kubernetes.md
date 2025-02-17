@@ -62,7 +62,7 @@
 ## EKS POD Networking - CNI
 
 - CNCF network specifications for Kubernetes:
-    - Every pod gets its onw IP address
+    - Every pod gets its own IP address
     - Containers in the same pod share the network IP address
     - All pods can communicate with all other pods without using network address translation (NAT)
     - All nodes can communicate with all pods without NAT

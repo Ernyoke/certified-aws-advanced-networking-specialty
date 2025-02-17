@@ -2,10 +2,10 @@
 
 - Is a managed implementation of OpenVPN
 - Any client device which can use the OpenVPN software is supported
-- Architecturally we connect to a Client VPN endpoint which can be associated with one VPC and with one ore more Target Networks
+- Architecturally we connect to a Client VPN endpoint which can be associated with one VPC and with one or more Target Networks
 - Client VPN billing is based on network association and hourly fee for usage
 - Client VPN setup:
-    - We crate a Client VPN Endpoint and associate it with a VPC and one or more subnets from the VPC
+    - We create a Client VPN Endpoint and associate it with a VPC and one or more subnets from the VPC
     - This association places an ENI into the subnets associated
     - We can only pick one subnet per AZ
 - Client VPN can use many different methods of authentication (Cognito User Pool, Federated Identities AWS Directory Service)

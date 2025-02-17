@@ -1,6 +1,6 @@
 # DDoS - Distributed Denial of Service Attacks
 
-- DDoS attacks are designed to overload websites, be generating traffic which competes against legitimate connections
+- DDoS attacks are designed to overload websites, by generating traffic which competes against legitimate connections
 - Distributed: hard to block individual IPs/ranges
 - DDoS attacks generally fit in:
     - Application Layer attacks: HTTP Flood

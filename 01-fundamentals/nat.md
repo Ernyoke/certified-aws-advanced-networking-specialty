@@ -1,6 +1,6 @@
 # NAT - Network Address Translation
 
-- It is a process to designed the growing shortage of IPv4 addresses
+- It is a process designed to address the growing shortage of IPv4 addresses
 - IPv4 address are either publicly routable or private addresses
 - Public addresses have to be unique in order to function correctly
 - Private addresses can be used in multiple places but can't be routed over the internet
